@@ -380,6 +380,8 @@ function restoreLocal() {
     if (nameEl) nameEl.value = d.name || "";
     if (contactEl) contactEl.value = d.contact || "";
     qNames.forEach(n => setVal(n, d[n] || ""));
+        // ✅ 마지막 진행 step 복원
+    if (d.progress_step) current = Math.max(1, Math.min(10, Number(d.progress_step) || 1));
     const consent = !!d.consent;
     const privacyAgree = document.getElementById("privacyAgree");
     if (privacyAgree) privacyAgree.checked = consent;
@@ -423,7 +425,6 @@ function scoreAll(form) {
   const addCheckin = hasQ4(form.q4, "실행 점검(체크인)") ? { v2: 0.15 } : { v2: 0 };
   const addComm = hasQ4(form.q4, "커뮤니티/동료 자극") ? { v3: 0.25 } : { v3: 0 };
   const addOrg = hasQ4(form.q4, "정보 정리") ? { v5: 0.25 } : { v5: 0 };
-
   const v1 = clip01(0.70 * bE + 0.30 * bR);
   const v2 = clip01(0.80 * bR + 0.20 * bE + addShort.v2 + addCheckin.v2);
   const v3 = clip01(addComm.v3 + 0.10 * bE);
@@ -606,9 +607,6 @@ function readForm(status="draft") {
     consent: consentGranted,
     name: nameEl?.value || "",
     contact: contactEl?.value || "",
-    gender: getVal("gender"),
-    ageRange: getVal("ageRange"),
-    job: getVal("job"),
     q1: getVal("q1"),
     q2: getVal("q2"),
     q3: getVal("q3"),
@@ -617,6 +615,15 @@ function readForm(status="draft") {
     q6: getVal("q6"),
     q7: getVal("q7"),
     q8: getVal("q8"),
+
+        // ✅ demographic
+    gender: getVal("gender"),
+    ageRange: getVal("ageRange"),
+    job: getVal("job"),
+
+    // ✅ funnel tracking
+    progress_step: current,
+
     ...utm,
     referrer: document.referrer || "",
     user_agent: navigator.userAgent || "",
@@ -624,8 +631,10 @@ function readForm(status="draft") {
     timezone_offset: String(new Date().getTimezoneOffset()),
     updated_at: new Date().toISOString(),
     model_version: "scoring_v1"
+    
   };
 }
+  
 
 async function autosave() {
   const now = Date.now();
