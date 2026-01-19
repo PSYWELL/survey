@@ -1,0 +1,597 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>PSYwell | 결과 요약</title>
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      --text: #50164A;
+      --bg: #FAF7FF;
+      --surface: #FFFFFF;
+      --border: #E6DEEF;
+      --muted: #7B6A86;
+      --primary: #8E7BAF;
+      --primary-2: #A577B3;
+      --primary-soft: #F2EDFF;
+      --header-line: #A293BD;
+      --danger: #C62828;
+      --radius: 18px;
+      --shadow: 0 10px 30px rgba(80, 22, 74, 0.10);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+      color: var(--text);
+      background: radial-gradient(1200px 800px at 20% 10%, rgba(165,119,179,0.22), rgba(250,247,255,0) 55%),
+                  radial-gradient(900px 700px at 80% 0%, rgba(142,123,175,0.18), rgba(250,247,255,0) 60%),
+                  var(--bg);
+      line-height: 1.6;
+    }
+
+    .topline {
+      width: 100%;
+      border-bottom: 1px solid var(--header-line);
+      background: rgba(255,255,255,0.75);
+      backdrop-filter: blur(8px);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .topline-inner {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .brand {
+      font-weight: 900;
+      letter-spacing: -0.3px;
+      font-size: 18px;
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #fff;
+      font-size: 13px;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .wrap {
+      width: 100%;
+      padding: 26px 18px 80px;
+    }
+    .container {
+      max-width: 980px;
+      margin: 0 auto;
+      display: grid;
+      gap: 14px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px 18px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 28px;
+      line-height: 1.25;
+      letter-spacing: -0.6px;
+    }
+    h2 {
+      margin: 0 0 10px;
+      font-size: 18px;
+      letter-spacing: -0.2px;
+    }
+    p { margin: 10px 0 0; color: var(--muted); }
+
+    .hero {
+      padding: 22px 20px;
+      background: linear-gradient(180deg, rgba(142,123,175,0.18), rgba(255,255,255,0) 70%), #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+
+    .type-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: var(--primary-soft);
+      border: 1px solid rgba(142,123,175,0.35);
+      color: var(--text);
+      font-weight: 800;
+      margin-top: 12px;
+    }
+
+    .grid2 {
+      display: grid;
+      gap: 14px;
+    }
+    @media (min-width: 920px) {
+      .grid2 { grid-template-columns: 1.2fr 0.8fr; }
+    }
+
+    .kpis {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .kpi {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px;
+      background: #fff;
+    }
+    .kpi .label { font-size: 12px; color: var(--muted); }
+    .kpi .value { font-size: 18px; font-weight: 900; margin-top: 6px; color: var(--text); }
+
+    .list {
+      display: grid;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .item {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      background: #fff;
+    }
+    .item .title {
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .item .tag {
+      font-size: 12px;
+      color: var(--muted);
+      background: rgba(142,123,175,0.12);
+      border: 1px solid rgba(142,123,175,0.25);
+      padding: 6px 10px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .btnrow { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+    .btn {
+      border: 0;
+      cursor: pointer;
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-weight: 800;
+      font-size: 14px;
+    }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-ghost { background: #fff; color: var(--text); border: 1px solid var(--border); }
+
+    .note {
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .form {
+      display: grid;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+    label { font-size: 13px; font-weight: 800; }
+    input[type="number"], input[type="text"] {
+      width: 100%;
+      padding: 12px 12px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      font-size: 14px;
+      outline: none;
+      font-family: inherit;
+    }
+    input:focus { border-color: rgba(142,123,175,0.65); box-shadow: 0 0 0 3px rgba(142,123,175,0.18); }
+
+    .warn { display: none; color: var(--danger); font-weight: 800; font-size: 13px; margin-top: 8px; }
+
+    details {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      background: #fff;
+    }
+    summary { cursor: pointer; font-weight: 900; color: var(--text); }
+    .steps {
+      margin-top: 10px;
+      display: grid;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .steps b { color: var(--text); }
+
+    .footerline {
+      margin-top: 24px;
+      border-top: 1px solid var(--header-line);
+      padding-top: 18px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <div class="topline">
+    <div class="topline-inner">
+      <div class="brand">PSYwell</div>
+      <div class="chip" id="chip">결과 요약</div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="container">
+      <div class="hero" id="hero">
+        <h1 id="headline">결과를 불러오는 중입니다</h1>
+        <div class="type-badge" id="typeBadge" style="display:none;"></div>
+        <p id="subcopy"></p>
+        <div class="kpis" id="kpis" style="display:none;">
+          <div class="kpi"><div class="label">III</div><div class="value" id="kpiIII">-</div></div>
+          <div class="kpi"><div class="label">우선 조율</div><div class="value" id="kpiRI">-</div></div>
+          <div class="kpi"><div class="label">추천 개입 수</div><div class="value" id="kpiN">-</div></div>
+        </div>
+        <div class="btnrow" id="heroBtns" style="display:none;">
+          <button class="btn btn-primary" id="goA4" style="display:none;">10분 리셋 시작</button>
+          <button class="btn btn-ghost" id="backSurvey">설문 다시 하기</button>
+        </div>
+        <div class="note" id="note"></div>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <h2>추천 조합</h2>
+          <div class="list" id="recList"></div>
+        </div>
+
+        <div class="card">
+          <h2>피드백</h2>
+          <p>아래 3개만 입력해도 학습에 충분합니다. (0~10)</p>
+          <div class="form">
+            <div class="field">
+              <label for="satisfaction">도움이 되었나요?</label>
+              <input type="number" id="satisfaction" min="0" max="10" placeholder="0~10" />
+            </div>
+            <div class="field">
+              <label for="burden">부담은 어느 정도였나요?</label>
+              <input type="number" id="burden" min="0" max="10" placeholder="0~10" />
+            </div>
+            <div class="field">
+              <label for="improve">전보다 좋아졌나요?</label>
+              <input type="number" id="improve" min="0" max="10" placeholder="0~10" />
+            </div>
+
+            <div class="field">
+              <label for="comment">한 줄 메모 (선택)</label>
+              <input type="text" id="comment" placeholder="예: 10분 리셋은 부담이 적었어요" />
+            </div>
+
+            <button class="btn btn-primary" id="sendFeedback">피드백 저장</button>
+            <div class="warn" id="fbWarn">0~10 범위로 입력해 주세요.</div>
+            <div class="note" id="fbDone" style="display:none;">저장되었습니다. 다음 추천부터 반영됩니다.</div>
+          </div>
+        </div>
+      </div>
+
+      <details id="a4Details" style="display:none;">
+        <summary>10분 리셋 실행 가이드 보기</summary>
+        <div class="steps">
+          <div><b>0:00~0:30</b> 타이머 10분 설정, 메모 준비</div>
+          <div><b>0:30~2:30</b> 머릿속에 걸리는 것을 줄로 전부 적기(뇌 덤프)</div>
+          <div><b>2:30~5:30</b> 각 항목에 D(오늘 처리) / S(일정) / Dg(위임/보류) 표시</div>
+          <div><b>5:30~8:30</b> D에서 Top1(필수) + Top2(옵션) 선택, 나머지는 S로 이동</div>
+          <div><b>8:30~10:00</b> Top1을 90초만 “착수”(파일 열기/첫 문장/캘린더 블록 등)</div>
+        </div>
+      </details>
+
+      <div class="footerline">
+        본 결과는 설문 응답 기반의 비의료적 정보 요약입니다. 개인의 웰빙과 자기조절을 돕기 위한 목적으로만 제공됩니다.
+      </div>
+    </div>
+  </div>
+
+<script>
+  /* =====================
+     GAS 설정 (survey.html과 동일하게 유지)
+  ===================== */
+  const GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbw13NmEhTG-THV_QBQKFNfc9pCDyRiULIn0MtFhECk4s_mMIm3Lzm0WTMf5mij-m7DCFA/exec";
+  const SHEET_ID = "1IcouHOeYE2rAPnEVJ4G6Y5d-1piY7pvwM2FFp3xXuxQ";
+  const WRITE_TOKEN = "mindflow_write_token_2026_01_x7Q9mA3F2Zp8cR0K";
+
+  function uuid() {
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, c => {
+      const r = Math.random() * 16 | 0, v = c === "x" ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
+  }
+  function clip01(x) { return Math.max(0, Math.min(1, x)); }
+
+  async function sendToSheet(payload) {
+    const res = await fetch(GAS_WEBAPP_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({ token: WRITE_TOKEN, sheetId: SHEET_ID, payload })
+    });
+    return res.json();
+  }
+
+  function typeCopy(typeCode, hasF) {
+    const base = {
+      A: { name: "방전형 실행 과부하", one: "에너지가 고갈된 상태에서 실행 부담이 겹쳐 있는 유형",
+        bullets: ["회복이 충분하지 않은 상태에서 해야 할 일 부담이 동시에 쌓여 있습니다.","이 시점에서는 계획을 늘리기보다 실패하지 않는 최소 구조가 우선입니다.","핵심은 ‘잘 해내기’가 아니라 ‘무너지지 않기’입니다."] },
+      B: { name: "회복 우선형", one: "기본 구조는 유지되지만 회복 자원이 먼저 필요한 유형",
+        bullets: ["루틴이 완전히 무너진 상태는 아니지만 회복이 따라오지 않는 흐름이 보입니다.","무리한 실행 강화는 중장기적으로 과부하를 키울 수 있습니다.","회복이 확보되면 실행 안정성도 자연스럽게 개선될 가능성이 큽니다."] },
+      C: { name: "구조 재정렬형", one: "에너지는 있으나 구조가 이를 지지하지 못하는 유형",
+        bullets: ["실행 의지는 충분하지만 우선순위와 흐름이 정리되지 않아 에너지가 분산됩니다.","더 열심히 하기보다 ‘정리’가 곧 성과로 이어지는 지점입니다.","구조가 잡히면 실행 효율이 빠르게 개선될 가능성이 높습니다."] },
+      D: { name: "흔들리는 유지형", one: "전반적으로 안정적이나 외부 조건에 따라 흔들릴 수 있는 유형",
+        bullets: ["기본 균형은 유지되지만 일정 변화나 피로 누적 시 흔들릴 수 있습니다.","큰 개입보다 정기적인 점검과 미세 조정이 효과적입니다.","작은 이탈을 조기에 잡는 것이 핵심입니다."] },
+      E: { name: "자기주도 안정형", one: "자기조절과 균형이 비교적 잘 유지되는 유형",
+        bullets: ["현재의 루틴과 에너지 흐름이 큰 무리 없이 작동하고 있습니다.","이 단계에서는 문제 해결보다 유지와 미세 최적화가 더 중요합니다.","과잉 개입은 오히려 균형을 해칠 수 있습니다."] }
+    };
+    const t = base[typeCode] || base.D;
+    const overlay = hasF
+      ? "\n\n추가적으로, 혼자 감당하는 부담이 커 보이는 신호가 함께 나타납니다. 이 경우 ‘함께하는 구조’가 균형 회복에 더 도움이 될 수 있습니다."
+      : "";
+    return { name: t.name, one: t.one, text: t.bullets.map(s => `- ${s}`).join("\n") + overlay };
+  }
+
+  const interventionDict = {
+    A1: { title: "초단위 루틴", tag: "최소 실행", desc: "3~5분 내 끝나는 최소 단위로 ‘연결’을 유지합니다." },
+    A2: { title: "에너지 회복 루틴", tag: "회복", desc: "호흡/휴식/리듬 회복 중심으로 자원 재충전을 우선합니다." },
+    A3: { title: "실행 체크인", tag: "점검", desc: "하루 1회 ‘지금 상태’를 확인해 과부하를 조기에 감지합니다." },
+    A4: { title: "10분 리셋", tag: "정리", desc: "10분 안에 뇌 덤프→분류→Top1 착수까지 마무리하는 구조 리셋입니다." },
+    A5: { title: "우선순위 리셋", tag: "결정", desc: "이번 주 핵심 1~2개를 정해 분산을 줄이고 실행을 선명하게 합니다." },
+    A6: { title: "사회적 연결 트리거", tag: "연결", desc: "혼자 감당하는 부담을 줄이기 위한 ‘연결 행동’을 설계합니다." },
+    A7: { title: "자기관찰 로그", tag: "인식", desc: "상태를 기록해 패턴을 인지하고 조율 포인트를 명확히 합니다." },
+    A8: { title: "유지 최적화", tag: "유지", desc: "잘 되는 것을 유지하면서 과잉 개입 없이 미세 조정합니다." }
+  };
+
+  function riLabel(riRank) {
+    const map = { v1:"심리안정", v2:"자기조절", v3:"사회연결", v4:"신체활력", v5:"인지정리" };
+    const top2 = (Array.isArray(riRank) ? riRank : []).slice(0,2).map(k => map[k] || k);
+    return top2.join(" / ") || "-";
+  }
+
+  function rewardWeights(typeCode) {
+    const w = {
+      A: { w1: 0.4, w2: 0.3, w3: 0.5 },
+      B: { w1: 0.45, w2: 0.35, w3: 0.4 },
+      C: { w1: 0.55, w2: 0.35, w3: 0.3 },
+      D: { w1: 0.4, w2: 0.45, w3: 0.3 },
+      E: { w1: 0.3, w2: 0.5, w3: 0.2 }
+    };
+    return w[typeCode] || w.D;
+  }
+
+  // Load last result
+  const anonId = localStorage.getItem("psy_anon_id") || "";
+  const lastKey = anonId ? ("psy_last_result_" + anonId) : "";
+  const raw = lastKey ? localStorage.getItem(lastKey) : null;
+
+  const els = {
+    chip: document.getElementById("chip"),
+    headline: document.getElementById("headline"),
+    subcopy: document.getElementById("subcopy"),
+    typeBadge: document.getElementById("typeBadge"),
+    kpis: document.getElementById("kpis"),
+    kpiIII: document.getElementById("kpiIII"),
+    kpiRI: document.getElementById("kpiRI"),
+    kpiN: document.getElementById("kpiN"),
+    recList: document.getElementById("recList"),
+    goA4: document.getElementById("goA4"),
+    a4Details: document.getElementById("a4Details"),
+    heroBtns: document.getElementById("heroBtns"),
+    backSurvey: document.getElementById("backSurvey"),
+    note: document.getElementById("note"),
+
+    satisfaction: document.getElementById("satisfaction"),
+    burden: document.getElementById("burden"),
+    improve: document.getElementById("improve"),
+    comment: document.getElementById("comment"),
+    sendFeedback: document.getElementById("sendFeedback"),
+    fbWarn: document.getElementById("fbWarn"),
+    fbDone: document.getElementById("fbDone")
+  };
+
+  function renderNoData() {
+    els.headline.textContent = "결과를 찾을 수 없습니다";
+    els.subcopy.textContent = "설문을 다시 진행해 주세요.";
+    els.heroBtns.style.display = "flex";
+    els.backSurvey.onclick = () => location.href = "survey.html";
+  }
+
+  // ✅ survey.html(중첩) / thanks.html(평평) 저장 구조를 모두 평평한 구조로 정규화
+  function normalizeResult(d) {
+    const scored = d?.scored || {};
+    const opt = d?.optimize || {};
+
+    const type_code = scored.typeCode || d?.type_code || "D";
+    const overlay_F = !!(scored.overlayF ?? d?.overlay_F);
+
+    const III =
+      (typeof scored.III === "number") ? scored.III :
+      (typeof d?.III === "number") ? d.III :
+      null;
+
+    const RI_rank =
+      Array.isArray(scored.riRank) ? scored.riRank :
+      Array.isArray(d?.RI_rank) ? d.RI_rank :
+      [];
+
+    const X =
+      (opt && typeof opt === "object" && opt.X && typeof opt.X === "object") ? opt.X :
+      (d && typeof d === "object" && d.X && typeof d.X === "object") ? d.X :
+      {};
+
+    return {
+      // ids
+      anon_id: d?.anon_id,
+      session_id: d?.session_id,
+      submission_id: d?.submission_id,
+      recommendation_id: d?.recommendation_id,
+
+      // core
+      type_code,
+      overlay_F,
+      III,
+      RI_rank,
+      X
+    };
+  }
+
+  function renderResult(rawObj) {
+    const d = normalizeResult(rawObj);
+
+    const copy = typeCopy(d.type_code, d.overlay_F);
+
+    els.chip.textContent = `TYPE ${d.type_code}`;
+    els.headline.textContent = "현재 상태 요약";
+    els.subcopy.textContent = copy.one;
+    els.typeBadge.style.display = "inline-flex";
+    els.typeBadge.textContent = `TYPE ${d.type_code} · ${copy.name}`;
+
+    els.kpis.style.display = "grid";
+    els.kpiIII.textContent = (d.III === null) ? "-" : Number(d.III).toFixed(2);
+    els.kpiRI.textContent = riLabel(d.RI_rank);
+
+    const selected = Object.keys(d.X).filter(k => !!d.X[k]);
+    els.kpiN.textContent = String(selected.length);
+
+    els.recList.innerHTML = "";
+    selected.forEach(code => {
+      const it = interventionDict[code] || { title: code, tag: "개입", desc: "" };
+      const div = document.createElement("div");
+      div.className = "item";
+      div.innerHTML = `<div class="title"><span>${it.title}</span><span class="tag">${it.tag}</span></div><p>${it.desc}</p>`;
+      els.recList.appendChild(div);
+    });
+
+    if (selected.includes("A4")) {
+      els.goA4.style.display = "inline-block";
+      els.a4Details.style.display = "block";
+    } else {
+      els.goA4.style.display = "none";
+      els.a4Details.style.display = "none";
+    }
+
+    els.heroBtns.style.display = "flex";
+    els.backSurvey.onclick = () => location.href = "survey.html";
+
+    els.goA4.onclick = async () => {
+      els.a4Details.open = true;
+      window.scrollTo({ top: els.a4Details.offsetTop - 80, behavior: "smooth" });
+      try {
+        await sendToSheet({
+          anon_id: d.anon_id || anonId,
+          session_id: d.session_id || "",
+          submission_id: d.submission_id || "",
+          recommendation_id: d.recommendation_id || "",
+          status: "event",
+          event_type: "A4_started",
+          updated_at: new Date().toISOString()
+        });
+      } catch (e) {}
+    };
+
+    els.note.textContent = "원하면 추천 조합을 1개씩만 실행해도 충분합니다. 과도한 변화보다 ‘작은 안정화’가 우선입니다.";
+
+    // ✅ 피드백에서 쓰기 쉽게: 정규화된 d를 보관
+    window.__psy = { d, typeCode: d.type_code, hasF: d.overlay_F, selected };
+  }
+
+  if (!raw) {
+    renderNoData();
+  } else {
+    try {
+      renderResult(JSON.parse(raw));
+    } catch (e) {
+      renderNoData();
+    }
+  }
+
+  function valid0to10(n) {
+    return Number.isFinite(n) && n >= 0 && n <= 10;
+  }
+
+  els.sendFeedback.addEventListener("click", async () => {
+    const sat = Number(els.satisfaction.value);
+    const bur = Number(els.burden.value);
+    const imp = Number(els.improve.value);
+    if (!valid0to10(sat) || !valid0to10(bur) || !valid0to10(imp)) {
+      els.fbWarn.style.display = "block";
+      return;
+    }
+    els.fbWarn.style.display = "none";
+
+    const ctx = window.__psy;
+    const typeCode = ctx?.typeCode || "D";
+    const w = rewardWeights(typeCode);
+
+    const deltaIII = clip01(imp / 10);
+    const satisfaction = clip01(sat / 10);
+    const burden = clip01(bur / 10);
+
+    const r = (w.w1 * deltaIII) + (w.w2 * satisfaction) - (w.w3 * burden);
+
+    els.sendFeedback.textContent = "저장 중...";
+    els.sendFeedback.disabled = true;
+
+    const payload = {
+      anon_id: ctx?.d?.anon_id || anonId,
+      session_id: ctx?.d?.session_id || "",
+      submission_id: ctx?.d?.submission_id || "",
+      recommendation_id: ctx?.d?.recommendation_id || uuid(),
+      status: "feedback",
+      type_code: typeCode,
+      // ✅ 여기 중요: 정규화된 ctx.d.X 를 저장
+      X_json: JSON.stringify(ctx?.d?.X || {}),
+      user_satisfaction_0_10: sat,
+      user_burden_0_10: bur,
+      improve_0_10: imp,
+      delta_III: deltaIII,
+      reward_r: r,
+      comment: els.comment.value || "",
+      updated_at: new Date().toISOString()
+    };
+
+    try {
+      await sendToSheet(payload);
+      els.fbDone.style.display = "block";
+    } catch (e) {
+      els.fbWarn.textContent = "저장에 실패했습니다. 네트워크를 확인해주세요.";
+      els.fbWarn.style.display = "block";
+    } finally {
+      els.sendFeedback.textContent = "피드백 저장";
+      els.sendFeedback.disabled = false;
+    }
+  });
+</script>
+
+</body>
+</html>

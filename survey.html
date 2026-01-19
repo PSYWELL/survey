@@ -1,0 +1,761 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>PSYwell | 정서지문 설문</title>
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      --text: #50164A;
+      --bg: #FAF7FF;
+      --surface: #FFFFFF;
+      --border: #E6DEEF;
+      --muted: #7B6A86;
+      --primary: #8E7BAF;
+      --primary-2: #A577B3;
+      --primary-soft: #F2EDFF;
+      --danger: #C62828;
+      --radius: 18px;
+      --shadow: 0 10px 30px rgba(80, 22, 74, 0.10);
+    }
+
+    *{box-sizing:border-box;}
+    html,body{height:100%;}
+    body{
+      margin:0;
+      font-family:Pretendard,-apple-system,BlinkMacSystemFont,system-ui,Roboto,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 800px at 20% 10%, rgba(165,119,179,0.22), rgba(250,247,255,0) 55%),
+        radial-gradient(900px 700px at 80% 0%, rgba(142,123,175,0.18), rgba(250,247,255,0) 60%),
+        var(--bg);
+      line-height:1.6;
+      word-break:keep-all;
+    }
+    a{color:inherit;text-decoration:none;}
+
+    .page{min-height:100vh;padding:24px 16px 48px;display:flex;align-items:center;justify-content:center;}
+    .card{width:100%;max-width:760px;background:var(--surface);border:1px solid var(--border);border-radius:24px;box-shadow:var(--shadow);overflow:hidden;}
+
+    .topbar{padding:18px 22px;border-bottom:1px solid var(--border);background:linear-gradient(180deg, rgba(242,237,255,0.9), rgba(255,255,255,1));}
+    .brand{display:flex;align-items:center;justify-content:space-between;gap:12px;}
+    .brand-left{display:flex;align-items:center;gap:10px;min-width:0;}
+    .logo{width:34px;height:34px;border-radius:12px;background:linear-gradient(135deg,var(--primary),var(--primary-2));box-shadow:0 8px 18px rgba(142,123,175,0.25);flex:0 0 auto;}
+    .brand-title{font-weight:900;letter-spacing:-0.3px;font-size:16px;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .brand-sub{font-size:13px;color:var(--muted);margin-top:2px;}
+    .step-indicator{font-size:13px;font-weight:800;color:var(--primary);white-space:nowrap;}
+
+    .progress-wrap{height:6px;background:rgba(142,123,175,0.15);border-radius:999px;overflow:hidden;margin-top:14px;}
+    .bar{height:100%;width:0%;background:linear-gradient(90deg,var(--primary),var(--primary-2));transition:width .35s ease;}
+
+    .content{padding:26px 22px 22px;}
+    h1{margin:0 0 10px;font-size:26px;font-weight:900;letter-spacing:-0.6px;line-height:1.25;}
+    .desc{margin:0 0 22px;color:var(--muted);font-size:15px;}
+
+    .pill{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;background:var(--primary-soft);border:1px solid rgba(142,123,175,0.22);font-size:13px;font-weight:800;color:var(--text);margin-bottom:14px;}
+    .pill .dot{width:8px;height:8px;border-radius:999px;background:var(--primary);}
+
+    .step{display:none;animation:fadeIn .35s ease;}
+    .step.active{display:block;}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+    .input-group{margin:18px 0 0;}
+    label.field-label{display:block;font-weight:800;margin-bottom:8px;font-size:14px;color:var(--text);}
+
+    input[type="text"],input[type="tel"],input[type="email"]{
+      width:100%;padding:14px;border:1px solid var(--border);border-radius:var(--radius);font-size:16px;outline:none;transition:box-shadow .15s,border-color .15s;background:#fff;color:var(--text);
+    }
+    input:focus{border-color:rgba(142,123,175,0.8);box-shadow:0 0 0 4px rgba(142,123,175,0.18);}
+
+    .options-grid{display:grid;gap:12px;margin-top:14px;}
+    .visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0;}
+
+    .option-card{display:flex;align-items:center;gap:12px;padding:16px;background:#fff;border:1px solid var(--border);border-radius:16px;cursor:pointer;transition:transform .12s ease,background .12s ease,border-color .12s ease;font-weight:650;color:var(--text);}
+    .option-card:hover{transform:translateY(-1px);border-color:rgba(142,123,175,0.55);background:rgba(242,237,255,0.6);}
+    input:checked + .option-card{border-color:rgba(142,123,175,0.95);background:var(--primary-soft);box-shadow:0 10px 22px rgba(142,123,175,0.16);font-weight:850;}
+
+    .actions{display:flex;gap:10px;padding:18px 22px 22px;border-top:1px solid var(--border);background:rgba(255,255,255,0.9);}
+    .btn{border:none;border-radius:999px;padding:14px 16px;font-size:15px;font-weight:900;cursor:pointer;transition:transform .12s ease,opacity .12s ease;}
+    .btn:active{transform:translateY(1px);}
+    .btn-prev{flex:0 0 88px;background:rgba(142,123,175,0.12);color:var(--text);}
+    .btn-next{flex:1;background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#fff;box-shadow:0 10px 22px rgba(142,123,175,0.22);}
+    .btn-next[disabled]{opacity:.55;cursor:not-allowed;}
+
+    .fine{margin-top:14px;font-size:12.5px;color:var(--muted);}
+
+    .consent-box{margin-top:18px;padding:14px;border-radius:16px;border:1px dashed rgba(142,123,175,0.35);background:rgba(242,237,255,0.55);}
+    .consent-check{display:flex;align-items:center;gap:10px;font-weight:900;}
+    .consent-desc{margin-top:8px;font-size:13px;color:var(--muted);line-height:1.5;}
+
+    .warn{display:none;margin-top:10px;font-size:13px;color:var(--danger);font-weight:900;}
+
+    @media (max-width:520px){
+      .content{padding:24px 16px 18px;}
+      .actions{padding:16px 16px 18px;}
+      h1{font-size:24px;}
+      .btn-prev{flex-basis:80px;}
+    }
+  </style>
+</head>
+<body>
+
+<div class="page">
+  <div class="card">
+
+    <div class="topbar">
+      <div class="brand">
+        <div class="brand-left">
+          <div class="logo" aria-hidden="true"></div>
+          <div style="min-width:0">
+            <div class="brand-title">PSYwell 정서지문 설문</div>
+            <div class="brand-sub">3분 내외 · 결과 요약 제공</div>
+          </div>
+        </div>
+        <div class="step-indicator" id="stepLabel">Step 1 / 10</div>
+      </div>
+      <div class="progress-wrap"><div class="bar" id="bar"></div></div>
+    </div>
+
+    <div class="content">
+
+      <!-- 1 -->
+      <div class="step active" data-step="1">
+        <div class="pill"><span class="dot"></span> 시작</div>
+        <h1>시작하기 전,<br>누구신지 알려주세요</h1>
+        <p class="desc">이름과 연락처는 <b>선택</b>입니다.<br>남겨주시면 <b>결과 요약</b>과 <b>우선 안내</b>를 드립니다.</p>
+        <div class="input-group">
+          <label class="field-label" for="name">이름 (선택)</label>
+          <input type="text" id="name" placeholder="예: STELLA" autocomplete="name" />
+        </div>
+        <div class="input-group">
+          <label class="field-label" for="contact">연락처 (선택)</label>
+          <input type="text" id="contact" placeholder="010-0000-0000 또는 이메일" autocomplete="email" />
+        </div>
+        <div class="fine">※ 설문 진행 중에는 기기 내 임시 저장이 됩니다.</div>
+      </div>
+
+
+
+      <!-- 2: Demographics -->
+      <div class="step" data-step="2">
+        <div class="pill"><span class="dot"></span> 기본 정보</div>
+        <h1>기본적인 정보를<br>알려주세요</h1>
+        <p class="desc">서비스 개선을 위한 참고용이며, 결과에는 영향을 주지 않습니다.</p>
+
+        <div class="input-group">
+          <label class="field-label">성별</label>
+          <div class="options-grid">
+            <label><input type="radio" name="gender" value="여성" class="visually-hidden"><div class="option-card">👩 여성</div></label>
+            <label><input type="radio" name="gender" value="남성" class="visually-hidden"><div class="option-card">👨 남성</div></label>
+            <label><input type="radio" name="gender" value="응답하지 않음" class="visually-hidden"><div class="option-card">➖ 응답하지 않음</div></label>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label class="field-label">연령대</label>
+          <div class="options-grid">
+            <label><input type="radio" name="ageRange" value="20대" class="visually-hidden"><div class="option-card">20대</div></label>
+            <label><input type="radio" name="ageRange" value="30대" class="visually-hidden"><div class="option-card">30대</div></label>
+            <label><input type="radio" name="ageRange" value="40대" class="visually-hidden"><div class="option-card">40대</div></label>
+            <label><input type="radio" name="ageRange" value="50대 이상" class="visually-hidden"><div class="option-card">50대 이상</div></label>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label class="field-label">현재 상황에 가장 가까운 것은?</label>
+          <div class="options-grid">
+            <label><input type="radio" name="job" value="직장인" class="visually-hidden"><div class="option-card">💼 직장인</div></label>
+            <label><input type="radio" name="job" value="프리랜서" class="visually-hidden"><div class="option-card">🧑‍💻 프리랜서</div></label>
+            <label><input type="radio" name="job" value="사업/창업" class="visually-hidden"><div class="option-card">🚀 사업/창업</div></label>
+            <label><input type="radio" name="job" value="학생" class="visually-hidden"><div class="option-card">🎓 학생</div></label>
+            <label><input type="radio" name="job" value="기타" class="visually-hidden"><div class="option-card">➕ 기타</div></label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 -->
+      <div class="step" data-step="3">
+        <div class="pill"><span class="dot"></span> 현재 상태</div>
+        <h1>오늘 당신의<br>에너지 레벨은 어떤가요?</h1>
+        <p class="desc">직관적으로 느껴지는 상태를 선택해주세요.</p>
+        <div class="options-grid">
+          <label><input type="radio" name="q1" value="낮음" class="visually-hidden"><div class="option-card">🔋 낮음 (방전 상태)</div></label>
+          <label><input type="radio" name="q1" value="보통" class="visually-hidden"><div class="option-card">😐 보통 (평범한 하루)</div></label>
+          <label><input type="radio" name="q1" value="높음" class="visually-hidden"><div class="option-card">⚡ 높음 (의욕 충만)</div></label>
+        </div>
+      </div>
+
+      <!-- 5 -->
+      <div class="step" data-step="4">
+        <div class="pill"><span class="dot"></span> 루틴</div>
+        <h1>최근 2주간,<br>루틴을 지키기 어려웠나요?</h1>
+        <div class="options-grid">
+          <label><input type="radio" name="q2" value="거의 없음" class="visually-hidden"><div class="option-card">✅ 거의 없었음 (잘 유지함)</div></label>
+          <label><input type="radio" name="q2" value="가끔" class="visually-hidden"><div class="option-card">⚠️ 가끔 (종종 실패함)</div></label>
+          <label><input type="radio" name="q2" value="자주" class="visually-hidden"><div class="option-card">🚨 자주 (거의 못 지킴)</div></label>
+        </div>
+      </div>
+
+      <!-- 6 -->
+      <div class="step" data-step="5">
+        <div class="pill"><span class="dot"></span> 패턴</div>
+        <h1>하루 중 가장<br>에너지가 떨어지는 시간은?</h1>
+        <div class="options-grid">
+          <label><input type="radio" name="q3" value="오전" class="visually-hidden"><div class="option-card">🌅 오전 (기상 직후~점심)</div></label>
+          <label><input type="radio" name="q3" value="점심 이후" class="visually-hidden"><div class="option-card">☀️ 점심 이후 (식곤증 등)</div></label>
+          <label><input type="radio" name="q3" value="저녁" class="visually-hidden"><div class="option-card">🌆 저녁 (퇴근 무렵)</div></label>
+          <label><input type="radio" name="q3" value="늦은 밤" class="visually-hidden"><div class="option-card">🌙 늦은 밤 (취침 전)</div></label>
+        </div>
+      </div>
+
+      <!-- 7 -->
+      <div class="step" data-step="6">
+        <div class="pill"><span class="dot"></span> 니즈</div>
+        <h1>지금 가장 필요한<br>도움은 무엇인가요?</h1>
+        <p class="desc">여러 개 선택하셔도 됩니다.</p>
+        <div class="options-grid">
+          <label><input type="checkbox" name="q4" value="짧은 루틴 추천" class="visually-hidden"><div class="option-card">🧘 짧은 루틴 추천</div></label>
+          <label><input type="checkbox" name="q4" value="실행 점검(체크인)" class="visually-hidden"><div class="option-card">✔️ 매일 실행 점검 (체크인)</div></label>
+          <label><input type="checkbox" name="q4" value="커뮤니티/동료 자극" class="visually-hidden"><div class="option-card">👥 함께하는 동료/커뮤니티</div></label>
+          <label><input type="checkbox" name="q4" value="정보 정리" class="visually-hidden"><div class="option-card">📚 흩어진 정보 정리</div></label>
+        </div>
+      </div>
+
+      <!-- 8 -->
+      <div class="step" data-step="7">
+        <div class="pill"><span class="dot"></span> 가격</div>
+        <h1>만약 유료라면,<br>어느 정도 가격대가 적당한가요?</h1>
+        <p class="desc">선호 가격대를 선택해 주세요.</p>
+        <div class="options-grid">
+          <label><input type="radio" name="q7" value="무료/체험 위주" class="visually-hidden"><div class="option-card">🆓 무료/체험 위주</div></label>
+          <label><input type="radio" name="q7" value="월 5천~1만원" class="visually-hidden"><div class="option-card">💳 월 5천~1만원</div></label>
+          <label><input type="radio" name="q7" value="월 1만~3만원" class="visually-hidden"><div class="option-card">💳 월 1만~3만원</div></label>
+          <label><input type="radio" name="q7" value="월 3만~5만원" class="visually-hidden"><div class="option-card">💳 월 3만~5만원</div></label>
+          <label><input type="radio" name="q7" value="월 5만원 이상" class="visually-hidden"><div class="option-card">💳 월 5만원 이상</div></label>
+        </div>
+      </div>
+
+      <!-- 9 -->
+      <div class="step" data-step="8">
+        <div class="pill"><span class="dot"></span> 핵심</div>
+        <h1>서비스에서 가장 중요한 건<br>무엇인가요?</h1>
+        <p class="desc">최대 2개까지 선택해 주세요.</p>
+        <div class="options-grid">
+          <label><input type="checkbox" name="q8" value="결과 신뢰도(설명 가능)" class="visually-hidden"><div class="option-card">✅ 결과 신뢰도 (왜 이런 결과인지)</div></label>
+          <label><input type="checkbox" name="q8" value="즉시 실행 가능한 루틴" class="visually-hidden"><div class="option-card">⚡ 즉시 실행 가능한 루틴</div></label>
+          <label><input type="checkbox" name="q8" value="중간저장/이어하기" class="visually-hidden"><div class="option-card">💾 중간저장/이어하기</div></label>
+          <label><input type="checkbox" name="q8" value="개인화(맞춤 추천)" class="visually-hidden"><div class="option-card">🎯 개인화 (맞춤 추천)</div></label>
+          <label><input type="checkbox" name="q8" value="프라이버시/익명성" class="visually-hidden"><div class="option-card">🔒 프라이버시/익명성</div></label>
+          <label><input type="checkbox" name="q8" value="커뮤니티/동료" class="visually-hidden"><div class="option-card">👥 커뮤니티/동료</div></label>
+        </div>
+        <div class="warn" id="q8Warn">최대 2개까지만 선택할 수 있어요.</div>
+      </div>
+
+      <!-- 10 -->
+      <div class="step" data-step="9">
+        <div class="pill"><span class="dot"></span> 의향</div>
+        <h1>맞춤형 루틴 서비스가 있다면<br>이용해 보시겠어요?</h1>
+        <div class="options-grid">
+          <label><input type="radio" name="q5" value="잘 모르겠다" class="visually-hidden"><div class="option-card">🤔 아직 잘 모르겠다</div></label>
+          <label><input type="radio" name="q5" value="상황에 따라" class="visually-hidden"><div class="option-card">👀 상황에 따라 해볼 듯</div></label>
+          <label><input type="radio" name="q5" value="꼭 이용" class="visually-hidden"><div class="option-card">🔥 꼭 이용하고 싶다</div></label>
+        </div>
+      </div>
+
+      <!-- 10 -->
+      <div class="step" data-step="10">
+        <div class="pill"><span class="dot"></span> 마무리</div>
+        <h1>마지막입니다.<br>어떤 방식을 선호하시나요?</h1>
+        <div class="options-grid">
+          <label><input type="radio" name="q6" value="완전 자가 진행" class="visually-hidden"><div class="option-card">📱 완전 자가 진행 (앱 전용)</div></label>
+          <label><input type="radio" name="q6" value="가벼운 안내/알림" class="visually-hidden"><div class="option-card">🔔 가벼운 알림 위주</div></label>
+          <label><input type="radio" name="q6" value="정기 체크인 포함" class="visually-hidden"><div class="option-card">👩‍💻 전문가/매니저의 정기 체크인</div></label>
+        </div>
+
+        <!-- Consent (필수) -->
+        <div class="consent-box">
+          <label class="consent-check" for="privacyAgree">
+            <input id="privacyAgree" name="privacyAgree" type="checkbox" />
+            <span>[필수] 개인정보 수집·이용에 동의합니다.</span>
+          </label>
+          <div class="consent-desc">
+            수집 항목: 이름, 연락처(전화/이메일), 설문 응답, 접속정보(브라우저 등)<br>
+            이용 목적: 설문 결과 제공, 문의 응대, 서비스 개선 참고<br>
+            보관 기간: 목적 달성 후 지체 없이 파기
+          </div>
+          <div class="warn" id="consentWarn">개인정보 수집·이용 동의가 필요합니다.</div>
+        </div>
+      </div>
+
+    </div><!-- /.content -->
+
+    <div class="actions">
+      <button class="btn btn-prev" id="prevBtn" style="visibility:hidden;" type="button">이전</button>
+      <button class="btn btn-next" id="nextBtn" type="button">다음</button>
+      <button class="btn btn-next" id="submitBtn" style="display:none;" type="button">결과 보기</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* =========================================================
+   0) Storage + IDs
+========================================================= */
+function uuid() {
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, c => {
+    const r = Math.random() * 16 | 0, v = c === "x" ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}
+function getOrCreate(key, factory) {
+  const v = localStorage.getItem(key);
+  if (v) return v;
+  const nv = factory();
+  localStorage.setItem(key, nv);
+  return nv;
+}
+
+const anonId = getOrCreate("psy_anon_id", uuid);
+const sessionId = uuid();
+const draftKey = "psy_draft_" + anonId;
+const lastResultKey = "psy_last_result_" + anonId;
+
+/* =========================================================
+   1) Optional GAS logging
+========================================================= */
+const GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbw13NmEhTG-THV_QBQKFNfc9pCDyRiULIn0MtFhECk4s_mMIm3Lzm0WTMf5mij-m7DCFA/exec";
+const SHEET_ID = "1IcouHOeYE2rAPnEVJ4G6Y5d-1piY7pvwM2FFp3xXuxQ";
+const WRITE_TOKEN = "mindflow_write_token_2026_01_x7Q9mA3F2Zp8cR0K";
+
+async function sendToSheet(payload) {
+  if (!GAS_WEBAPP_URL) return { ok: true, skipped: true };
+  const res = await fetch(GAS_WEBAPP_URL, {
+    method: "POST",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify({ token: WRITE_TOKEN, sheetId: SHEET_ID, payload })
+  });
+  try { return await res.json(); } catch { return { ok: false }; }
+}
+
+function qp() {
+  const p = new URLSearchParams(location.search);
+  return {
+    utm_source: p.get("utm_source") || "",
+    utm_medium: p.get("utm_medium") || "",
+    utm_campaign: p.get("utm_campaign") || "",
+    utm_term: p.get("utm_term") || "",
+    utm_content: p.get("utm_content") || "",
+  };
+}
+
+/* =========================================================
+   2) Read/Write form values
+========================================================= */
+function getVal(name) {
+  const radio = document.querySelector(`input[name="${name}"]:checked`);
+  if (radio) return radio.value;
+  const checks = document.querySelectorAll(`input[name="${name}"]:checked`);
+  if (checks.length > 0) return Array.from(checks).map(c => c.value).join(", ");
+  return "";
+}
+function setVal(name, val) {
+  if (!val) return;
+  const inputs = document.querySelectorAll(`input[name="${name}"]`);
+  const values = String(val).split(", ");
+  inputs.forEach(input => { if (values.includes(input.value)) input.checked = true; });
+}
+
+const nameEl = document.getElementById("name");
+const contactEl = document.getElementById("contact");
+const qNames = ["gender","ageRange","job","q1","q2","q3","q4","q5","q6","q7","q8"];
+
+function writeLocal(obj) { localStorage.setItem(draftKey, JSON.stringify(obj)); }
+function restoreLocal() {
+  const raw = localStorage.getItem(draftKey);
+  if (!raw) return;
+  try {
+    const d = JSON.parse(raw);
+    if (nameEl) nameEl.value = d.name || "";
+    if (contactEl) contactEl.value = d.contact || "";
+    qNames.forEach(n => setVal(n, d[n] || ""));
+    const consent = !!d.consent;
+    const privacyAgree = document.getElementById("privacyAgree");
+    if (privacyAgree) privacyAgree.checked = consent;
+  } catch {}
+}
+
+/* =========================================================
+   3) Scoring: q -> V, P, III, RI, TYPE
+========================================================= */
+function clip01(x) { return Math.max(0, Math.min(1, x)); }
+
+function baseFromEnergy(q1) {
+  if (q1 === "낮음") return 1.00;
+  if (q1 === "보통") return 0.50;
+  if (q1 === "높음") return 0.20;
+  return 0.50;
+}
+function baseFromRoutine(q2) {
+  if (q2 === "자주") return 1.00;
+  if (q2 === "가끔") return 0.60;
+  if (q2 === "거의 없음") return 0.20;
+  return 0.60;
+}
+function addFromTime(q3) {
+  if (q3 === "오전") return 0.15;
+  if (q3 === "점심 이후") return 0.10;
+  if (q3 === "저녁") return 0.05;
+  if (q3 === "늦은 밤") return 0.10;
+  return 0.10;
+}
+function hasQ4(q4csv, item) {
+  return String(q4csv).split(", ").includes(item);
+}
+
+function scoreAll(form) {
+  const bE = baseFromEnergy(form.q1);
+  const bR = baseFromRoutine(form.q2);
+  const aT = addFromTime(form.q3);
+
+  const addShort = hasQ4(form.q4, "짧은 루틴 추천") ? { v2: 0.10, v4: 0.05 } : { v2: 0, v4: 0 };
+  const addCheckin = hasQ4(form.q4, "실행 점검(체크인)") ? { v2: 0.15 } : { v2: 0 };
+  const addComm = hasQ4(form.q4, "커뮤니티/동료 자극") ? { v3: 0.25 } : { v3: 0 };
+  const addOrg = hasQ4(form.q4, "정보 정리") ? { v5: 0.25 } : { v5: 0 };
+
+  const v1 = clip01(0.70 * bE + 0.30 * bR);
+  const v2 = clip01(0.80 * bR + 0.20 * bE + addShort.v2 + addCheckin.v2);
+  const v3 = clip01(addComm.v3 + 0.10 * bE);
+  const v4 = clip01(0.85 * bE + aT + addShort.v4);
+  const v5 = clip01(addOrg.v5 + 0.15 * bR);
+
+  const V = { v1, v2, v3, v4, v5 };
+
+  const p1 = clip01((v1 + v4) / 2);
+  const p2 = clip01((v2 + v5) / 2);
+  const P = { p1, p2 };
+
+  const w = { v1: 0.25, v2: 0.30, v3: 0.15, v4: 0.20, v5: 0.10 };
+  const III = clip01(w.v1*v1 + w.v2*v2 + w.v3*v3 + w.v4*v4 + w.v5*v5);
+
+  const RI = {
+    v1: w.v1 * v1,
+    v2: w.v2 * v2,
+    v3: w.v3 * v3,
+    v4: w.v4 * v4,
+    v5: w.v5 * v5,
+  };
+  const riRank = Object.entries(RI).sort((a,b)=>b[1]-a[1]).map(x=>x[0]);
+
+  const HIGH = 0.65, LOW = 0.45;
+  let typeCode = "D";
+  if (p1 >= HIGH && p2 >= HIGH) typeCode = "A";
+  else if (p1 >= HIGH && p2 < HIGH) typeCode = "B";
+  else if (p1 < HIGH && p2 >= HIGH) typeCode = "C";
+  else if (p1 < LOW && p2 < LOW) typeCode = "E";
+  else typeCode = "D";
+
+  const overlayF = (v3 >= 0.70);
+
+  return { V, P, III, RI, riRank, typeCode, overlayF };
+}
+
+/* =========================================================
+   4) Interventions + Synergy + Optimize
+========================================================= */
+const S = {
+  A1: { A2: 0.30, A3: 0.15, A4: -0.10, A5: 0.00, A6: 0.00, A7: 0.15, A8: 0.10 },
+  A2: { A3: 0.10, A4: -0.20, A5: -0.15, A6: 0.00, A7: 0.15, A8: 0.10 },
+  A3: { A4: 0.15, A5: 0.10, A6: 0.00, A7: 0.30, A8: 0.15 },
+  A4: { A5: 0.30, A6: -0.15, A7: 0.10, A8: 0.10 },
+  A5: { A6: -0.10, A7: 0.10, A8: 0.10 },
+  A6: { A7: 0.15, A8: 0.10 },
+  A7: { A8: 0.15 },
+};
+function s(i,j){
+  if (i===j) return 0;
+  return (S[i] && S[i][j]!==undefined) ? S[i][j] : (S[j] && S[j][i]!==undefined) ? S[j][i] : 0;
+}
+
+const TYPE_BUDGET = { A: 0.35, B: 0.35, C: 0.45, D: 0.40, E: 0.40 };
+const TYPE_ARMS = {
+  A: {
+    candidates: ["A1","A2","A3","A7"],
+    effect: { A1:0.35, A2:0.40, A3:0.20, A7:0.15 },
+    resource:{ A1:0.10, A2:0.15, A3:0.10, A7:0.10 }
+  },
+  B: {
+    candidates: ["A2","A1","A7","A3"],
+    effect: { A2:0.35, A1:0.25, A7:0.20, A3:0.20 },
+    resource:{ A2:0.15, A1:0.10, A7:0.10, A3:0.10 }
+  },
+  C: {
+    candidates: ["A1","A3","A4","A5","A7"],
+    effect: { A1:0.15, A3:0.20, A4:0.35, A5:0.30, A7:0.20 },
+    resource:{ A1:0.10, A3:0.10, A4:0.25, A5:0.20, A7:0.10 }
+  },
+  D: {
+    candidates: ["A3","A7","A1","A8"],
+    effect: { A3:0.30, A7:0.25, A1:0.20, A8:0.20 },
+    resource:{ A3:0.10, A7:0.10, A1:0.10, A8:0.15 }
+  },
+  E: {
+    candidates: ["A8","A7","A3"],
+    effect: { A8:0.30, A7:0.20, A3:0.15 },
+    resource:{ A8:0.15, A7:0.10, A3:0.10 }
+  },
+};
+
+function optimize(typeCode, overlayF){
+  const budget = TYPE_BUDGET[typeCode] ?? 0.40;
+  const specBase = TYPE_ARMS[typeCode] ?? TYPE_ARMS.D;
+
+  // clone to avoid side effects
+  const spec = {
+    candidates: [...specBase.candidates],
+    effect: { ...specBase.effect },
+    resource: { ...specBase.resource }
+  };
+
+  if (overlayF && !spec.candidates.includes("A6")) {
+    spec.candidates.push("A6");
+    spec.effect.A6 = 0.35;
+    spec.resource.A6 = 0.20;
+  }
+
+  const candidates = spec.candidates;
+  const n = candidates.length;
+  const results = [];
+
+  for (let mask=1; mask < (1<<n); mask++) {
+    let res = 0;
+    let base = 0;
+    const picked = [];
+
+    for (let i=0;i<n;i++) {
+      if (mask & (1<<i)) {
+        const code = candidates[i];
+        picked.push(code);
+        res += spec.resource[code] ?? 0.20;
+        base += spec.effect[code] ?? 0.10;
+      }
+    }
+    if (res - budget > 1e-9) continue;
+
+    let syn = 0;
+    for (let i=0;i<picked.length;i++) {
+      for (let j=i+1;j<picked.length;j++) syn += s(picked[i], picked[j]);
+    }
+
+    const f = base + syn;
+    results.push({ picked, res: +res.toFixed(2), base:+base.toFixed(2), syn:+syn.toFixed(2), f:+f.toFixed(2) });
+  }
+
+  results.sort((a,b)=> (b.f-a.f) || (a.res-b.res) || (b.base-a.base));
+  const top = results.slice(0, 3);
+  const top1 = top[0] || { picked: [], res:0, base:0, syn:0, f:0 };
+  const X = { A1:0,A2:0,A3:0,A4:0,A5:0,A6:0,A7:0,A8:0 };
+  top1.picked.forEach(k => { X[k]=1; });
+
+  return { budget, candidates, top, top1, X };
+}
+
+/* =========================================================
+   5) UI navigation + autosave
+========================================================= */
+const steps = Array.from(document.querySelectorAll(".step"));
+const bar = document.getElementById("bar");
+const stepLabel = document.getElementById("stepLabel");
+const prevBtn = document.getElementById("prevBtn");
+const nextBtn = document.getElementById("nextBtn");
+const submitBtn = document.getElementById("submitBtn");
+
+const consentEl = document.getElementById("privacyAgree");
+const consentWarn = document.getElementById("consentWarn");
+
+let current = 1;
+let consentGranted = false;
+let lastSentAt = 0;
+
+function show(stepNo) {
+  steps.forEach(s => s.classList.remove("active"));
+  const s = steps.find(x => Number(x.dataset.step) === stepNo);
+  if (s) s.classList.add("active");
+
+  const total = 10;
+  const pct = Math.round(((stepNo - 1) / (total - 1)) * 100);
+  bar.style.width = pct + "%";
+  stepLabel.textContent = `Step ${stepNo} / ${total}`;
+
+  prevBtn.style.visibility = (stepNo === 1) ? "hidden" : "visible";
+  const isLast = (stepNo === total);
+  nextBtn.style.display = isLast ? "none" : "block";
+  submitBtn.style.display = isLast ? "block" : "none";
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function readForm(status="draft") {
+  const utm = qp();
+  return {
+    status,
+    anon_id: anonId,
+    session_id: sessionId,
+    submission_id: getOrCreate("psy_submission_id_"+sessionId, uuid),
+    consent: consentGranted,
+    name: nameEl?.value || "",
+    contact: contactEl?.value || "",
+    gender: getVal("gender"),
+    ageRange: getVal("ageRange"),
+    job: getVal("job"),
+    q1: getVal("q1"),
+    q2: getVal("q2"),
+    q3: getVal("q3"),
+    q4: getVal("q4"),
+    q5: getVal("q5"),
+    q6: getVal("q6"),
+    q7: getVal("q7"),
+    q8: getVal("q8"),
+    ...utm,
+    referrer: document.referrer || "",
+    user_agent: navigator.userAgent || "",
+    lang: navigator.language || "",
+    timezone_offset: String(new Date().getTimezoneOffset()),
+    updated_at: new Date().toISOString(),
+    model_version: "scoring_v1"
+  };
+}
+
+async function autosave() {
+  const now = Date.now();
+  if (now - lastSentAt < 1500) return;
+
+  const data = readForm("draft");
+  writeLocal(data);
+
+  if (!consentGranted) return;
+
+  lastSentAt = now;
+  try { await sendToSheet(data); } catch {}
+}
+
+function restoreAndInit(){
+  restoreLocal();
+  consentGranted = !!(consentEl && consentEl.checked);
+  show(current);
+}
+
+restoreAndInit();
+
+[nameEl, contactEl].forEach(el => {
+  if (!el) return;
+  el.addEventListener("change", autosave);
+  el.addEventListener("blur", autosave);
+});
+
+document.addEventListener("change", (e) => {
+  if (e.target && (e.target.matches("input[type=radio]") || e.target.matches("input[type=checkbox]"))) {
+    if (e.target.id === "privacyAgree") {
+      consentGranted = !!e.target.checked;
+      if (consentGranted && consentWarn) consentWarn.style.display = "none";
+      const data = readForm("draft");
+      writeLocal(data);
+      if (consentGranted) { try { sendToSheet(data); } catch {} }
+      return;
+    }
+    autosave();
+  }
+});
+
+// q8 max 2
+const q8WarnEl = document.getElementById("q8Warn");
+document.addEventListener("change", (e) => {
+  if (!e.target || e.target.name !== "q8") return;
+  const checked = document.querySelectorAll('input[name="q8"]:checked');
+  if (checked.length <= 2) {
+    if (q8WarnEl) q8WarnEl.style.display = "none";
+    return;
+  }
+  e.target.checked = false;
+  if (q8WarnEl) {
+    q8WarnEl.style.display = "block";
+    q8WarnEl.animate([
+      { transform: 'translateX(0)' },
+      { transform: 'translateX(-5px)' },
+      { transform: 'translateX(5px)' },
+      { transform: 'translateX(0)' }
+    ], { duration: 280 });
+  }
+});
+
+prevBtn.addEventListener("click", () => {
+  current = Math.max(1, current - 1);
+  show(current);
+});
+
+nextBtn.addEventListener("click", () => {
+  current = Math.min(10, current + 1);
+  show(current);
+});
+
+submitBtn.addEventListener("click", async (e) => {
+  e.preventDefault();
+
+  if (!consentEl || !consentEl.checked) {
+    if (consentWarn) {
+      consentWarn.style.display = "block";
+      consentWarn.animate([
+        { transform: 'translateX(0)' },
+        { transform: 'translateX(-5px)' },
+        { transform: 'translateX(5px)' },
+        { transform: 'translateX(0)' }
+      ], { duration: 300 });
+    }
+    return;
+  }
+
+  consentGranted = true;
+
+  submitBtn.textContent = "분석 중...";
+  submitBtn.disabled = true;
+
+  const data = readForm("submitted");
+  const scored = scoreAll(data);
+  const opt = optimize(scored.typeCode, scored.overlayF);
+
+  const result = {
+    ...data,
+    scored,
+    optimize: {
+      budget: opt.budget,
+      candidates: opt.candidates,
+      top: opt.top,
+      top1: opt.top1,
+      X: opt.X,
+      policy_version: "opt_exhaustive_v1"
+    },
+    created_at: new Date().toISOString(),
+  };
+
+  localStorage.setItem(lastResultKey, JSON.stringify(result));
+  writeLocal(data);
+
+  try {
+    await sendToSheet({
+      ...data,
+      ...scored,
+      budget_R: opt.budget,
+      X_json: JSON.stringify(opt.X),
+      top3_json: JSON.stringify(opt.top),
+      objective_f: opt.top1.f,
+      status: "submitted"
+    });
+  } catch {}
+
+  location.href = "thanks.html" + location.search;
+});
+</script>
+
+</body>
+</html>
