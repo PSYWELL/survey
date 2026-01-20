@@ -1,6 +1,15 @@
 <!doctype html>
 <html lang="ko">
 <head>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SQFDW53MYX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-SQFDW53MYX');
+</script>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>PSYwell | 결과 요약</title>
@@ -592,6 +601,50 @@ const WRITE_TOKEN = "mindflow_write_token_2026_01_x7Q9mA3F2Zp8cR0K";
     }
   });
 </script>
+
+  <div style="max-width:760px;margin:24px auto;padding:16px;border:1px solid #E6DEEF;border-radius:16px;background:#fff;">
+  <h2 style="margin:0 0 10px;">피드백</h2>
+
+  <label>만족도 (0~10)</label>
+  <input id="user_satisfaction_0_10" type="number" min="0" max="10" style="width:100%;padding:12px;margin:6px 0 12px;">
+
+  <label>부담도 (0~10)</label>
+  <input id="user_burden_0_10" type="number" min="0" max="10" style="width:100%;padding:12px;margin:6px 0 12px;">
+
+  <label>개선 기대감 (0~10)</label>
+  <input id="improve_0_10" type="number" min="0" max="10" style="width:100%;padding:12px;margin:6px 0 12px;">
+
+  <label>코멘트</label>
+  <textarea id="comment" rows="4" style="width:100%;padding:12px;margin:6px 0 12px;"></textarea>
+
+  <button id="feedbackBtn" style="width:100%;padding:14px;border:0;border-radius:999px;background:#8E7BAF;color:#fff;font-weight:800;">
+    피드백 보내기
+  </button>
+
+  <div id="fbMsg" style="margin-top:10px;color:#7B6A86;font-weight:700;"></div>
+</div>
+
+<div style="max-width:760px;margin:24px auto;padding:16px;border:1px solid #E6DEEF;border-radius:16px;background:#fff;">
+  <h2 style="margin:0 0 10px;">피드백</h2>
+
+  <label>만족도 (0~10)</label>
+  <input id="user_satisfaction_0_10" type="number" min="0" max="10" style="width:100%;padding:12px;margin:6px 0 12px;">
+
+  <label>부담도 (0~10)</label>
+  <input id="user_burden_0_10" type="number" min="0" max="10" style="width:100%;padding:12px;margin:6px 0 12px;">
+
+  <label>개선 기대감 (0~10)</label>
+  <input id="improve_0_10" type="number" min="0" max="10" style="width:100%;padding:12px;margin:6px 0 12px;">
+
+  <label>코멘트</label>
+  <textarea id="comment" rows="4" style="width:100%;padding:12px;margin:6px 0 12px;"></textarea>
+
+  <button id="feedbackBtn" style="width:100%;padding:14px;border:0;border-radius:999px;background:#8E7BAF;color:#fff;font-weight:800;">
+    피드백 보내기
+  </button>
+
+  <div id="fbMsg" style="margin-top:10px;color:#7B6A86;font-weight:700;"></div>
+</div>
 
 </body>
 </html>
