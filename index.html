@@ -10,27 +10,27 @@
 
   gtag('config', 'G-SQFDW53MYX');
 </script>
-  <script>
+<script>
   function toggleHeaderMenu(e) {
     e.stopPropagation();
     const menu = document.getElementById('headerMenu');
-    if (!menu) return;
     menu.classList.toggle('hidden');
   }
 
+  // 바깥 클릭 시 닫기
   document.addEventListener('click', () => {
     const menu = document.getElementById('headerMenu');
-    if (!menu) return;
-    menu.classList.add('hidden');
+    if (menu) menu.classList.add('hidden');
   });
 
-  // ✅ 메뉴 내부 클릭 시 닫히지 않게
+  // 메뉴 내부 클릭 시 닫히지 않게
   document.addEventListener('DOMContentLoaded', () => {
     const menu = document.getElementById('headerMenu');
     if (!menu) return;
-    menu.addEventListener('click', (e) => e.stopPropagation());
+    menu.addEventListener('click', e => e.stopPropagation());
   });
 </script>
+
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -585,6 +585,7 @@
         }
     </style>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
 
 </head>
 <body>
@@ -592,77 +593,59 @@
 
 <div class="wrap">
 
-<header class="fixed top-0 left-0 right-0 z-50 bg-bgMain/80 backdrop-blur border-b border-black/5">
-  <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-    <a href="#" class="font-bold text-textBlack tracking-tight">
-      <span class="lang-ko">My Recovery System</span>
-      <span class="lang-en">My Recovery System</span>
+<header class="fixed top-0 w-full z-50 bg-bgMain/80 backdrop-blur border-b border-gray-200">
+  <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+
+    <!-- 좌측 로고 -->
+    <a href="index.html" class="font-bold text-textBlack text-lg">
+      Psywell
     </a>
 
-    <!-- ✅ 드롭다운 기준점: relative -->
-    <div class="header-actions" style="position:relative; display:flex; align-items:center; gap:8px;">
-      
-      <!-- 컨택트: 이메일 아이콘 -->
-      <a
-        href="mailto:stella@yggda.com?subject=My%20Recovery%20System%20Inquiry"
-        class="icon-btn"
-        aria-label="Contact us (email)"
-        title="Contact us"
-      >
-        <!-- (권장) 아이콘을 SVG로 고정: 외부 라이브러리 없이 100% 동작 -->
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M4 4h16v16H4z"></path>
-          <path d="m22 6-10 7L2 6"></path>
-        </svg>
+    <!-- 우측 메뉴 -->
+    <div class="flex items-center gap-4">
+
+      <!-- Contact Us : 모바일 = 아이콘 / 데스크톱 = 텍스트 -->
+      <a href="mailto:contact@psywell.com"
+         class="text-textBody hover:text-accent transition hidden md:inline">
+        Contact Us
       </a>
 
-      <!-- 사전조사/샘플: 점점점(⋯) 드롭다운 -->
-      <button
-        type="button"
-        class="icon-btn"
-        aria-label="Survey samples"
-        title="Survey samples"
-        onclick="toggleHeaderMenu(event)"
-      >
-        <!-- ⋯ SVG -->
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <circle cx="5" cy="12" r="2"></circle>
-          <circle cx="12" cy="12" r="2"></circle>
-          <circle cx="19" cy="12" r="2"></circle>
-        </svg>
+      <a href="mailto:contact@psywell.com"
+         class="md:hidden text-xl text-textBody hover:text-accent">
+        <i class="ph ph-envelope-simple"></i>
+      </a>
+
+      <!-- 사전조사 / 샘플 : 점점점 버튼 -->
+      <button onclick="toggleHeaderMenu(event)"
+              class="text-2xl text-textBody hover:text-accent">
+        <i class="ph ph-dots-three-outline"></i>
       </button>
 
-      <!-- CTA 버튼: 데스크탑 텍스트 / 모바일 아이콘 -->
-      <button
-        onclick="document.querySelector('#survey-section').scrollIntoView({behavior:'smooth'})"
-        class="cta-btn-desktop"
-      >
-        <span class="lang-ko">지금 예약하기</span><span class="lang-en">Reserve Now</span>
-      </button>
-      <button
-        onclick="document.querySelector('#survey-section').scrollIntoView({behavior:'smooth'})"
-        class="cta-btn-mobile"
-        aria-label="Reserve now"
-        title="Reserve"
-      >
-        <span aria-hidden="true">→</span>
-      </button>
+      <!-- 드롭다운 -->
+      <div id="headerMenu"
+           class="hidden absolute right-4 top-16 w-40 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden">
 
-      <!-- ✅ 드롭다운 패널: 부모가 relative이므로 right/top 안정 -->
-      <div id="headerMenu" class="header-menu hidden">
-        <div class="header-menu-title">
-          <span class="lang-ko">사전조사 샘플</span>
-          <span class="lang-en">Survey Samples</span>
-        </div>
-        <a href="sample1.html" class="header-menu-item">Sample 1</a>
-        <a href="sample2.html" class="header-menu-item">Sample 2</a>
-        <a href="sample3.html" class="header-menu-item">Sample 3</a>
+        <a href="indexSUR1.html"
+           class="block px-4 py-3 text-sm hover:bg-gray-50">
+          샘플 1
+        </a>
+        <a href="indexSUR2.html"
+           class="block px-4 py-3 text-sm hover:bg-gray-50">
+          샘플 2
+        </a>
+        <a href="indexSUR3.html"
+           class="block px-4 py-3 text-sm hover:bg-gray-50">
+          샘플 3
+        </a>
       </div>
 
     </div>
   </div>
 </header>
+
+<!-- 헤더 높이 보정 -->
+<div class="h-16"></div>
+
 
 
 
@@ -839,6 +822,7 @@
 </body>
 
 </html>
+
 
 
 
