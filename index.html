@@ -38,6 +38,9 @@
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
     <style>
 
+        .hidden { display: none !important; }
+
+
         /* 헤더 우측 아이콘 버튼 공통 */
 .icon-btn{
   width:40px;
@@ -583,6 +586,27 @@
             .footer-inner { flex-direction: column; text-align: center; }
             .footer-left { justify-content: center; flex-direction: column; }
         }
+        .nav-right{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:14px;
+  flex-wrap:nowrap;
+}
+
+.menu-wrap{
+  position:relative;
+  display:flex;
+  align-items:center;
+}
+
+/* sample-menu는 기존 스타일 재사용 + 위치만 확실히 */
+#headerMenu.sample-menu{
+  display:block;          /* hidden이 display:none으로 제어 */
+  right:0;
+  top:100%;
+}
+
     </style>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 <script src="https://unpkg.com/@phosphor-icons/web"></script>
@@ -593,55 +617,64 @@
 
 <div class="wrap">
 
-<header class="fixed top-0 w-full z-50 bg-bgMain/80 backdrop-blur border-b border-gray-200">
-  <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-
-    <!-- 좌측 로고 -->
-    <a href="index.html" class="font-bold text-textBlack text-lg">
-      Psywell
+<header>
+  <div class="header-inner">
+    <!-- 좌측: 로고 -->
+    <a href="#" class="logo">
+      My Recovery System
     </a>
 
-    <!-- 우측 메뉴 -->
-    <div class="flex items-center gap-4">
-
-      <!-- Contact Us : 모바일 = 아이콘 / 데스크톱 = 텍스트 -->
-      <a href="mailto:contact@psywell.com"
-         class="text-textBody hover:text-accent transition hidden md:inline">
+    <!-- 우측: 네비/액션 -->
+    <div class="nav-right">
+      <!-- Contact Us (PC 텍스트) -->
+      <a class="nav-link contact-link" href="mailto:stella@yggda.com?subject=My%20Recovery%20System%20Inquiry">
         Contact Us
       </a>
 
-      <a href="mailto:contact@psywell.com"
-         class="md:hidden text-xl text-textBody hover:text-accent">
-        <i class="ph ph-envelope-simple"></i>
+      <!-- Contact Us (모바일 아이콘) -->
+      <a class="contact-icon" href="mailto:stella@yggda.com?subject=My%20Recovery%20System%20Inquiry"
+         aria-label="Contact us (email)" title="Contact us">
+        <!-- Envelope SVG -->
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 4h16v16H4z"></path>
+          <path d="m4 6 8 7 8-7"></path>
+        </svg>
       </a>
 
-      <!-- 사전조사 / 샘플 : 점점점 버튼 -->
-      <button onclick="toggleHeaderMenu(event)"
-              class="text-2xl text-textBody hover:text-accent">
-        <i class="ph ph-dots-three-outline"></i>
-      </button>
+      <!-- 사전조사 (PC 텍스트 버튼) -->
+      <div class="menu-wrap">
+        <button type="button" class="nav-link sample-trigger sample-text"
+                onclick="toggleHeaderMenu(event)" aria-haspopup="true" aria-controls="headerMenu">
+          사전조사 <span class="sample-caret">▾</span>
+        </button>
 
-      <!-- 드롭다운 -->
-      <div id="headerMenu"
-           class="hidden absolute right-4 top-16 w-40 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden">
+        <!-- 사전조사 (모바일 ⋯ 버튼) -->
+        <button type="button" class="contact-icon sample-icon"
+                onclick="toggleHeaderMenu(event)" aria-label="Survey samples" title="Survey samples"
+                aria-haspopup="true" aria-controls="headerMenu">
+          <!-- Dots SVG -->
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <circle cx="5" cy="12" r="2"></circle>
+            <circle cx="12" cy="12" r="2"></circle>
+            <circle cx="19" cy="12" r="2"></circle>
+          </svg>
+        </button>
 
-        <a href="indexSUR1.html"
-           class="block px-4 py-3 text-sm hover:bg-gray-50">
-          샘플 1
-        </a>
-        <a href="indexSUR2.html"
-           class="block px-4 py-3 text-sm hover:bg-gray-50">
-          샘플 2
-        </a>
-        <a href="indexSUR3.html"
-           class="block px-4 py-3 text-sm hover:bg-gray-50">
-          샘플 3
-        </a>
+        <!-- 드롭다운 메뉴 -->
+        <div id="headerMenu" class="sample-menu hidden">
+          <a href="sample1.html" class="sample-item">Sample 1</a>
+          <a href="sample2.html" class="sample-item">Sample 2</a>
+          <a href="sample3.html" class="sample-item">Sample 3</a>
+        </div>
       </div>
 
+      <!-- CTA 버튼 (기존 header-btn 스타일 사용) -->
+      <a href="#survey-section" class="header-btn">지금 예약하기</a>
     </div>
   </div>
 </header>
+
 
 <!-- 헤더 높이 보정 -->
 <div class="h-16"></div>
@@ -822,6 +855,7 @@
 </body>
 
 </html>
+
 
 
 
