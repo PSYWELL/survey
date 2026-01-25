@@ -16,6 +16,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Psywell - 정서 반응 패턴 식별</title>
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+   
+    
     <style>
 
         .hidden { display: none !important; }
@@ -649,6 +651,13 @@
 
 /* 모바일에서도 ⋯는 항상 노출(요구사항: 사전조사 대신 ⋯ 사용) */
 .sample-icon{ display: inline-flex; }
+.menu-wrap { position: relative; }
+.sample-menu {
+  position: absolute;
+  z-index: 9999;
+}
+.topbar, .topbar-inner { overflow: visible !important; }
+.wrap, .container { overflow: visible !important; } /* 해당 클래스가 있으면 */
 
     </style>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
@@ -877,10 +886,53 @@
 
 
 </div>
+<script>
+  function toggleHeaderMenu(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const menu = document.getElementById('headerMenu');
+    const btn = e.currentTarget;
+
+    if (!menu) return;
+
+    const isHidden = menu.classList.contains('hidden');
+    // 닫기
+    if (!isHidden) {
+      menu.classList.add('hidden');
+      btn.setAttribute('aria-expanded', 'false');
+      return;
+    }
+
+    // 열기
+    menu.classList.remove('hidden');
+    btn.setAttribute('aria-expanded', 'true');
+  }
+
+  // 바깥 클릭 시 닫기
+  document.addEventListener('click', function () {
+    const menu = document.getElementById('headerMenu');
+    const btn = document.querySelector('[aria-controls="headerMenu"]');
+    if (!menu || !btn) return;
+
+    menu.classList.add('hidden');
+    btn.setAttribute('aria-expanded', 'false');
+  });
+
+  // 메뉴 내부 클릭은 닫히지 않게
+  document.addEventListener('DOMContentLoaded', function () {
+    const menu = document.getElementById('headerMenu');
+    if (!menu) return;
+    menu.addEventListener('click', function (e) {
+      e.stopPropagation();
+    });
+  });
+</script>
 
 </body>
 
 </html>
+
 
 
 
