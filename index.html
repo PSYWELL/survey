@@ -10,28 +10,6 @@
 
   gtag('config', 'G-SQFDW53MYX');
 </script>
-<script>
-  function toggleHeaderMenu(e) {
-    e.stopPropagation();
-    const menu = document.getElementById('headerMenu');
-    menu.classList.toggle('hidden');
-  }
-
-  // 바깥 클릭 시 닫기
-  document.addEventListener('click', () => {
-    const menu = document.getElementById('headerMenu');
-    if (menu) menu.classList.add('hidden');
-  });
-
-  // 메뉴 내부 클릭 시 닫히지 않게
-  document.addEventListener('DOMContentLoaded', () => {
-    const menu = document.getElementById('headerMenu');
-    if (!menu) return;
-    menu.addEventListener('click', e => e.stopPropagation());
-  });
-</script>
-
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Psywell - 정서 반응 패턴 식별</title>
@@ -619,68 +597,33 @@
 
 <header>
   <div class="header-inner">
-    <!-- 좌측: 로고 -->
-    <a href="#" class="logo">
-      My Recovery System
-    </a>
+    <a href="#" class="logo">PSYwell</a>
 
-    <!-- 우측: 네비/액션 -->
     <div class="nav-right">
       <!-- Contact Us (PC 텍스트) -->
-      <a class="nav-link contact-link" href="mailto:stella@yggda.com?subject=My%20Recovery%20System%20Inquiry">
+      <a class="nav-link contact-link" href="mailto:contact@psywell.com?subject=PSYwell%20Inquiry">
         Contact Us
       </a>
 
       <!-- Contact Us (모바일 아이콘) -->
-      <a class="contact-icon" href="mailto:stella@yggda.com?subject=My%20Recovery%20System%20Inquiry"
-         aria-label="Contact us (email)" title="Contact us">
-        <!-- Envelope SVG -->
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M4 4h16v16H4z"></path>
-          <path d="m4 6 8 7 8-7"></path>
+      <a class="contact-icon" href="mailto:contact@psywell.com?subject=PSYwell%20Inquiry"
+         aria-label="Contact Us" title="Contact Us">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
+             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+             aria-hidden="true">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+          <polyline points="22,6 12,13 2,6"></polyline>
         </svg>
       </a>
 
-      <!-- 사전조사 (PC 텍스트 버튼) -->
-      <div class="menu-wrap">
-        <button type="button" class="nav-link sample-trigger sample-text"
-                onclick="toggleHeaderMenu(event)" aria-haspopup="true" aria-controls="headerMenu">
-          사전조사 <span class="sample-caret">▾</span>
-        </button>
-
-        <!-- 사전조사 (모바일 ⋯ 버튼) -->
-        <button type="button" class="contact-icon sample-icon"
-                onclick="toggleHeaderMenu(event)" aria-label="Survey samples" title="Survey samples"
-                aria-haspopup="true" aria-controls="headerMenu">
-          <!-- Dots SVG -->
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <circle cx="5" cy="12" r="2"></circle>
-            <circle cx="12" cy="12" r="2"></circle>
-            <circle cx="19" cy="12" r="2"></circle>
-          </svg>
-        </button>
-
-        <!-- 드롭다운 메뉴 -->
-        <div id="headerMenu" class="sample-menu hidden">
-          <a href="sample1.html" class="sample-item">Sample 1</a>
-          <a href="sample2.html" class="sample-item">Sample 2</a>
-          <a href="sample3.html" class="sample-item">Sample 3</a>
-        </div>
-      </div>
-
-      <!-- CTA 버튼 (기존 header-btn 스타일 사용) -->
-      <a href="#survey-section" class="header-btn">지금 예약하기</a>
+      <!-- CTA -->
+      <a href="survey.html" class="header-btn">무료 패턴 분석 시작하기</a>
     </div>
   </div>
 </header>
 
-
 <!-- 헤더 높이 보정 -->
 <div class="h-16"></div>
-
-
-
 
     <section>
         <h1 class="main-title">문제는 의지가 아니라, 반복되는 선택 구조입니다.</h1>
@@ -855,6 +798,7 @@
 </body>
 
 </html>
+
 
 
 
