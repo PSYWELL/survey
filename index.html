@@ -31,6 +31,87 @@
     <title>Psywell - 정서 반응 패턴 식별</title>
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
     <style>
+
+        /* 헤더 우측 아이콘 버튼 공통 */
+.icon-btn{
+  width:40px;
+  height:40px;
+  border-radius:12px;
+  border:1px solid rgba(0,0,0,0.12);
+  background:#fff;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  color: var(--text-color);
+}
+.icon-btn:hover{ background:#f6f6f6; }
+
+/* 드롭다운 */
+.header-menu{
+  position:absolute;
+  top:52px;          /* 헤더 높이에 맞춰 조정 */
+  right:0;
+  width:224px;
+  background:#fff;
+  border:1px solid rgba(0,0,0,0.12);
+  border-radius:16px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.10);
+  overflow:hidden;
+  z-index:3000;
+}
+.header-menu-title{
+  padding:12px 16px;
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:0.08em;
+  color: rgba(0,0,0,0.55);
+}
+.header-menu-item{
+  display:block;
+  padding:12px 16px;
+  font-size:14px;
+  color: var(--text-color);
+}
+.header-menu-item:hover{ background:#f6f6f6; }
+
+/* hidden 클래스가 문서에 없을 가능성 대비 */
+.hidden{ display:none !important; }
+
+/* CTA 버튼(데스크탑/모바일 토글) */
+.cta-btn-desktop{
+  margin-left:4px;
+  height:40px;
+  padding:0 14px;
+  border-radius:12px;
+  background: var(--btn-bg);
+  color:#fff;
+  font-weight:700;
+  border:none;
+  cursor:pointer;
+  display:inline-flex;
+  align-items:center;
+}
+.cta-btn-desktop:hover{ opacity:0.92; }
+
+.cta-btn-mobile{
+  margin-left:4px;
+  width:40px;
+  height:40px;
+  border-radius:12px;
+  background: var(--btn-bg);
+  color:#fff;
+  border:none;
+  cursor:pointer;
+  display:none; /* 기본은 숨김 */
+}
+
+/* 모바일에서: 텍스트 CTA 숨기고 아이콘 CTA 표시 */
+@media (max-width: 768px){
+  .cta-btn-desktop{ display:none; }
+  .cta-btn-mobile{ display:inline-flex; align-items:center; justify-content:center; }
+}
+
         /* [1] 디자인 시스템 (요청하신 색상 적용) */
         :root {
             --text-color: #50164A;         /* 메인 글자색 */
@@ -505,73 +586,76 @@
 
 <header class="fixed top-0 left-0 right-0 z-50 bg-bgMain/80 backdrop-blur border-b border-black/5">
   <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-    <!-- 좌측: 로고/타이틀 -->
     <a href="#" class="font-bold text-textBlack tracking-tight">
       <span class="lang-ko">My Recovery System</span>
       <span class="lang-en">My Recovery System</span>
     </a>
 
-    <!-- 우측: 액션(모바일 아이콘) -->
-    <div class="flex items-center gap-2">
+    <!-- ✅ 드롭다운 기준점: relative -->
+    <div class="header-actions" style="position:relative; display:flex; align-items:center; gap:8px;">
+      
       <!-- 컨택트: 이메일 아이콘 -->
       <a
         href="mailto:stella@yggda.com?subject=My%20Recovery%20System%20Inquiry"
-        class="w-10 h-10 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 flex items-center justify-center"
+        class="icon-btn"
         aria-label="Contact us (email)"
         title="Contact us"
       >
-        <i class="ph ph-envelope-simple text-xl text-textPrimary"></i>
+        <!-- (권장) 아이콘을 SVG로 고정: 외부 라이브러리 없이 100% 동작 -->
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 4h16v16H4z"></path>
+          <path d="m22 6-10 7L2 6"></path>
+        </svg>
       </a>
 
       <!-- 사전조사/샘플: 점점점(⋯) 드롭다운 -->
       <button
         type="button"
-        class="w-10 h-10 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 flex items-center justify-center"
+        class="icon-btn"
         aria-label="Survey samples"
         title="Survey samples"
         onclick="toggleHeaderMenu(event)"
       >
-        <i class="ph ph-dots-three-outline text-xl text-textPrimary"></i>
+        <!-- ⋯ SVG -->
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <circle cx="5" cy="12" r="2"></circle>
+          <circle cx="12" cy="12" r="2"></circle>
+          <circle cx="19" cy="12" r="2"></circle>
+        </svg>
       </button>
 
-      <!-- (선택) CTA 버튼: 모바일에서만 아이콘, 데스크탑은 텍스트 -->
+      <!-- CTA 버튼: 데스크탑 텍스트 / 모바일 아이콘 -->
       <button
         onclick="document.querySelector('#survey-section').scrollIntoView({behavior:'smooth'})"
-        class="ml-1 h-10 px-4 rounded-xl bg-accent text-white font-semibold hover:bg-accentDark shadow-soft hidden sm:inline-flex items-center"
+        class="cta-btn-desktop"
       >
         <span class="lang-ko">지금 예약하기</span><span class="lang-en">Reserve Now</span>
       </button>
       <button
         onclick="document.querySelector('#survey-section').scrollIntoView({behavior:'smooth'})"
-        class="ml-1 w-10 h-10 rounded-xl bg-accent text-white hover:bg-accentDark shadow-soft inline-flex sm:hidden items-center justify-center"
+        class="cta-btn-mobile"
         aria-label="Reserve now"
         title="Reserve"
       >
-        <i class="ph ph-arrow-right text-lg"></i>
+        <span aria-hidden="true">→</span>
       </button>
 
-      <!-- 드롭다운 패널 -->
-      <div
-        id="headerMenu"
-        class="hidden absolute top-16 right-6 w-56 bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden"
-      >
-        <div class="px-4 py-3 text-xs font-bold tracking-widest text-gray-500">
+      <!-- ✅ 드롭다운 패널: 부모가 relative이므로 right/top 안정 -->
+      <div id="headerMenu" class="header-menu hidden">
+        <div class="header-menu-title">
           <span class="lang-ko">사전조사 샘플</span>
           <span class="lang-en">Survey Samples</span>
         </div>
-        <a href="sample1.html" class="block px-4 py-3 text-sm text-textPrimary hover:bg-gray-50">
-          Sample 1
-        </a>
-        <a href="sample2.html" class="block px-4 py-3 text-sm text-textPrimary hover:bg-gray-50">
-          Sample 2
-        </a>
-        <a href="sample3.html" class="block px-4 py-3 text-sm text-textPrimary hover:bg-gray-50">
-          Sample 3
-        </a>
+        <a href="sample1.html" class="header-menu-item">Sample 1</a>
+        <a href="sample2.html" class="header-menu-item">Sample 2</a>
+        <a href="sample3.html" class="header-menu-item">Sample 3</a>
       </div>
+
     </div>
   </div>
 </header>
+
 
 
     <section>
@@ -747,6 +831,7 @@
 </body>
 
 </html>
+
 
 
 
