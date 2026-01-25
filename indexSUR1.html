@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emotional Fingerprint | 정서지문</title>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: #1a1a24;
+            --text-primary: #f5f5f7;
+            --text-secondary: #a1a1aa;
+            --text-muted: #71717a;
+            --accent-primary: #6366f1;
+            --accent-secondary: #818cf8;
+            --accent-warm: #f59e0b;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --border-color: #27272a;
+            --gradient-1: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+            --gradient-2: linear-gradient(135deg, #1a1a24 0%, #0a0a0f 100%);
+        }
+.lang-en { display: none !important; }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        
+        body {
+            font-family: 'Pretendard', -apple-system, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            letter-spacing: -0.02em;
+        }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 0 24px; position: relative; }
+
+        /* 배경 효과 */
+        .ambient-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1; overflow: hidden; }
+        .ambient-orb { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.3; animation: float 20s ease-in-out infinite; }
+        .orb-1 { width: 600px; height: 600px; background: var(--accent-primary); top: -200px; right: -200px; }
+        .orb-2 { width: 400px; height: 400px; background: #8b5cf6; bottom: 20%; left: -100px; animation-delay: -7s; }
+        .orb-3 { width: 300px; height: 300px; background: var(--accent-warm); top: 50%; right: 10%; opacity: 0.15; animation-delay: -14s; }
+        @keyframes float { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(30px, -30px) scale(1.05); } }
+
+        /* Hero Section */
+        .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 120px 0 80px; }
+        .hero-badge { display: inline-block; padding: 8px 16px; background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 100px; font-size: 14px; font-weight: 500; color: var(--accent-secondary); margin-bottom: 32px; }
+        .hero h1 { font-size: clamp(36px, 6vw, 60px); font-weight: 800; line-height: 1.2; margin-bottom: 24px; }
+        .highlight { background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .hero-subtitle { font-size: clamp(16px, 2.5vw, 19px); color: var(--text-secondary); max-width: 700px; margin: 0 auto 48px; line-height: 1.7; }
+        
+        .hero-cta { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; width: 100%; max-width: 420px; margin: 0 auto; }
+        .btn { padding: 18px 0; border-radius: 12px; font-size: 16px; font-weight: 600; text-decoration: none; transition: all 0.3s ease; cursor: pointer; border: none; display: flex; align-items: center; justify-content: center; width: 100%; }
+        .btn-primary { background: var(--gradient-1); color: white; box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(99, 102, 241, 0.5); }
+        .btn-secondary { background: #27273a; color: #ffffff; border: 1px solid #3f3f46; }
+        .btn-secondary:hover { background: #32324a; border-color: var(--accent-primary); }
+
+        /* Section Styles */
+        section { padding: 100px 0; }
+        .section-label { font-size: 13px; font-weight: 600; color: var(--accent-primary); margin-bottom: 12px; display: block; }
+        .section-title { font-size: 32px; font-weight: 700; margin-bottom: 24px; }
+        .section-desc { font-size: 16px; color: var(--text-secondary); margin-bottom: 48px; }
+
+        /* Persona Grid */
+        .persona-section { background: var(--bg-secondary); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); }
+        .persona-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        .persona-card { background: var(--gradient-2); border: 1px solid var(--border-color); border-radius: 20px; padding: 32px; transition: all 0.3s ease; }
+        .persona-card:hover { border-color: var(--accent-primary); transform: translateY(-4px); }
+        .persona-icon-line { width: 40px; height: 40px; margin-bottom: 20px; color: var(--accent-primary); }
+        .persona-icon-line svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+        .persona-card h3 { font-size: 20px; font-weight: 700; margin-bottom: 12px; }
+        .persona-card > p { font-size: 14px; color: var(--text-muted); font-style: italic; margin-bottom: 20px; padding-left: 12px; border-left: 2px solid var(--accent-primary); }
+        .persona-symptoms { list-style: none; padding: 0; }
+        .persona-symptoms li { font-size: 14px; color: var(--text-secondary); padding: 6px 0; padding-left: 20px; position: relative; }
+        .persona-symptoms li::before { content: '✓'; position: absolute; left: 0; color: var(--accent-green); font-weight: 700; }
+
+        /* Pain Grid */
+        .pain-section { background: var(--bg-primary); }
+        .pain-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+        .pain-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 24px; transition: all 0.3s ease; }
+        .pain-card:hover { border-color: var(--accent-primary); transform: translateX(4px); }
+        .pain-quote { font-size: 17px; font-weight: 600; color: var(--text-primary); margin-bottom: 8px; }
+        .pain-context { font-size: 14px; color: var(--text-muted); margin-bottom: 12px; }
+        .pain-category { display: inline-block; font-size: 11px; padding: 4px 10px; border-radius: 100px; font-weight: 600; }
+        .category-ibs { background: rgba(239, 68, 68, 0.15); color: var(--accent-red); }
+        .category-sleep { background: rgba(139, 92, 246, 0.15); color: #a78bfa; }
+        .category-digestion { background: rgba(245, 158, 11, 0.15); color: var(--accent-warm); }
+        .category-stress { background: rgba(99, 102, 241, 0.15); color: var(--accent-primary); }
+
+        /* Survey Styles */
+        .survey-header { text-align: center; margin-bottom: 60px; }
+        .survey-header h2 { font-size: 36px; font-weight: 800; margin-bottom: 16px; color: #fff; }
+        .survey-header p { font-size: 18px; color: var(--text-secondary); line-height: 1.6; }
+
+        .q-block { margin-bottom: 56px; }
+        .q-title { font-size: 20px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+        .q-req { font-size: 13px; color: var(--accent-red); background: rgba(239, 68, 68, 0.1); padding: 2px 6px; border-radius: 4px; }
+        .q-opt { font-size: 13px; color: var(--text-muted); background: rgba(255, 255, 255, 0.05); padding: 2px 6px; border-radius: 4px; }
+        .sub-desc { font-weight: 400; font-size: 14px; color: var(--text-muted); margin-left: 4px; }
+        .text-guide { font-size: 14px; color: var(--text-secondary); margin-bottom: 20px; font-weight: 400; }
+
+        /* Grid & Layouts */
+        .grid-2-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .form-row-group { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+
+        .form-label { display: flex; align-items: center; padding: 18px; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; cursor: pointer; transition: all 0.2s; }
+        .form-label:hover { border-color: var(--accent-secondary); background: #1f1f2e; }
+        .form-label input { margin-right: 12px; accent-color: var(--accent-primary); width: 18px; height: 18px; }
+        .form-label span { font-size: 15px; font-weight: 500; }
+        
+        .form-input, .form-select, .form-textarea { width: 100%; padding: 16px; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; color: var(--text-primary); font-size: 15px; font-family: 'Pretendard', sans-serif; }
+        .form-input:focus, .form-select:focus, .form-textarea:focus { outline: none; border-color: var(--accent-primary); }
+        .form-select option { background-color: var(--bg-card); color: var(--text-primary); }
+
+        .gender-wrapper { display: flex; gap: 10px; width: 100%; }
+        .gender-wrapper label { flex: 1; justify-content: center; }
+
+        /* Accordion Styles */
+        .accordion-wrap { margin-bottom: 24px; border: 1px solid var(--border-color); border-radius: 16px; overflow: hidden; background: var(--bg-secondary); transition: all 0.3s; }
+        .accordion-header { padding: 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.02); transition: background 0.2s; }
+        .accordion-header:hover { background: rgba(255,255,255,0.05); }
+        .accordion-header h3 { font-size: 16px; margin: 0; color: var(--text-primary); font-weight: 600; display: flex; align-items: center; gap: 8px; }
+        .accordion-header .icon { color: var(--text-muted); transition: transform 0.3s; }
+        .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; background: var(--bg-card); }
+        .accordion-content-inner { padding: 24px; border-top: 1px solid var(--border-color); }
+        
+        .accordion-toggle { display: none; }
+        .accordion-toggle:checked ~ .accordion-content { max-height: 1000px; transition: max-height 0.5s ease-in; }
+        .accordion-toggle:checked ~ .accordion-header .icon { transform: rotate(180deg); }
+        .accordion-toggle:checked ~ .accordion-header { background: rgba(99, 102, 241, 0.1); border-bottom: 1px solid var(--border-color); }
+
+        .opt-label { font-size: 12px; color: var(--accent-secondary); background: rgba(99, 102, 241, 0.1); padding: 2px 6px; border-radius: 4px; margin-left: 8px; }
+
+        @media (max-width: 768px) {
+            .persona-grid, .pain-grid, .grid-2-col, .hero-cta, .form-row-group { grid-template-columns: 1fr; }
+            .hero-cta { max-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+
+
+    <div class="ambient-bg">
+        <div class="ambient-orb orb-1"></div>
+        <div class="ambient-orb orb-2"></div>
+        <div class="ambient-orb orb-3"></div>
+    </div>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-badge">
+                <span class="lang-ko">사전조사 샘플 테스트</span>
+                <span class="lang-en">Early Bird: Limited to 100 people</span>
+            </div>
+            <h1>
+                <span class="lang-ko">검사는 정상인데<br><span class="highlight">증상은 왜 계속될까요?</span></span>
+                <span class="lang-en">Tests are normal,<br><span class="highlight">Why do symptoms persist?</span></span>
+            </h1>
+            <p class="hero-subtitle">
+                <span class="lang-ko">병원에선 "이상 없다"는데 내 몸은 계속 힘들다면,<br>개인화된 정서지문 분석으로 근본 패턴을 찾아보세요.</span>
+                <span class="lang-en">If the doctor says "you're fine" but you're still suffering,<br>find the root pattern with personalized emotional fingerprint analysis.</span>
+            </p>
+            <div class="hero-cta">
+                <a href="#survey" class="btn btn-primary">
+                    <span class="lang-ko">참여하기 →</span>
+                    <span class="lang-en">Join Now →</span>
+                </a>
+                <a href="#persona" class="btn btn-secondary">
+                    <span class="lang-ko">나도 해당될까?</span>
+                    <span class="lang-en">Is this for me?</span>
+                </a>
+            </div>
+            <p style="margin-top: 40px; font-size: 15px; color: var(--text-primary); line-height: 1.6;">
+                <span class="lang-ko">당신의 패턴을 함께 발견하여 그동안 찾아내지 못한<br>당신만의 회복 루틴을 만들어드립니다.</span>
+                <span class="lang-en">We help you discover your patterns and build<br>a recovery routine you couldn't find before.</span>
+            </p>
+        </div>
+    </section>
+
+    <section class="persona-section" id="persona">
+        <div class="container">
+            <span class="section-label"><span class="lang-ko">타겟</span><span class="lang-en">Target</span></span>
+            <h2 class="section-title">
+                <span class="lang-ko">이런 분들을 위한 서비스입니다</span>
+                <span class="lang-en">Who is this for?</span>
+            </h2>
+            <div class="persona-grid">
+                <div class="persona-card">
+                    <div class="persona-icon-line"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></div>
+                    <h3>
+                        <span class="lang-ko">증상의 원인을<br>찾지 못해 답답한 분</span>
+                        <span class="lang-en">Frustrated by<br>Unknown Causes</span>
+                    </h3>
+                    <p>
+                        <span class="lang-ko">"진짜 원인이 뭔지 모르겠어요"</span>
+                        <span class="lang-en">"I don't know the real cause"</span>
+                    </p>
+                    <ul class="persona-symptoms">
+                        <li><span class="lang-ko">검사상 이상 없음</span><span class="lang-en">Normal test results</span></li>
+                        <li><span class="lang-ko">증상은 계속 반복</span><span class="lang-en">Recurring symptoms</span></li>
+                        <li><span class="lang-ko">원인 불명의 답답함</span><span class="lang-en">Unexplained discomfort</span></li>
+                    </ul>
+                </div>
+                <div class="persona-card">
+                    <div class="persona-icon-line"><svg viewBox="0 0 24 24"><path d="M10.5 20.5l10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7z"></path><line x1="8.5" y1="8.5" x2="15.5" y2="15.5"></line></svg></div>
+                    <h3>
+                        <span class="lang-ko">약물·영양제에<br>의존하고 있는 분</span>
+                        <span class="lang-en">Relying on<br>Meds/Supplements</span>
+                    </h3>
+                    <p>
+                        <span class="lang-ko">"약 없이는 불안해요"</span>
+                        <span class="lang-en">"Anxious without meds"</span>
+                    </p>
+                    <ul class="persona-symptoms">
+                        <li><span class="lang-ko">수면제/진정제 복용 중</span><span class="lang-en">Taking sleep aids/sedatives</span></li>
+                        <li><span class="lang-ko">영양제 월 5만원 이상</span><span class="lang-en">High supplement cost</span></li>
+                        <li><span class="lang-ko">근본 해결 원함</span><span class="lang-en">Want root solution</span></li>
+                    </ul>
+                </div>
+                <div class="persona-card">
+                    <div class="persona-icon-line"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></div>
+                    <h3>
+                        <span class="lang-ko">증상 패턴을<br>이해하고 싶은 분</span>
+                        <span class="lang-en">Want to Understand<br>Patterns</span>
+                    </h3>
+                    <p>
+                        <span class="lang-ko">"왜 저녁만 되면 아플까요?"</span>
+                        <span class="lang-en">"Why does it hurt at night?"</span>
+                    </p>
+                    <ul class="persona-symptoms">
+                        <li><span class="lang-ko">시간대별 증상 변화</span><span class="lang-en">Time-based changes</span></li>
+                        <li><span class="lang-ko">스트레스 후 악화</span><span class="lang-en">Worse after stress</span></li>
+                        <li><span class="lang-ko">패턴 파악 어려움</span><span class="lang-en">Hard to find patterns</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="pain-section">
+        <div class="container">
+            <span class="section-label"><span class="lang-ko">공감</span><span class="lang-en">Empathy</span></span>
+            <h2 class="section-title">
+                <span class="lang-ko">이런 증상이 있나요?</span>
+                <span class="lang-en">Do you have these symptoms?</span>
+            </h2>
+            <p class="section-desc">
+                <span class="lang-ko">실제 사용자들이 겪고 있는 이야기입니다.</span>
+                <span class="lang-en">Stories from actual users.</span>
+            </p>
+            <div class="pain-grid">
+                <div class="pain-card">
+                    <p class="pain-quote">
+                        <span class="lang-ko">배가 수시로 아프고 화장실을 자주 가요</span>
+                        <span class="lang-en">Frequent stomach aches & bathroom visits</span>
+                    </p>
+                    <p class="pain-context">
+                        <span class="lang-ko">중요한 일 있으면 설사... 과민성대장 진단받았어요</span>
+                        <span class="lang-en">Diarrhea before big events... Diagnosed with IBS</span>
+                    </p>
+                    <span class="pain-category category-ibs"><span class="lang-ko">과민성대장</span><span class="lang-en">IBS</span></span>
+                </div>
+                <div class="pain-card">
+                    <p class="pain-quote">
+                        <span class="lang-ko">심장이 자주 두근거려요</span>
+                        <span class="lang-en">Heart palpitations are frequent</span>
+                    </p>
+                    <p class="pain-context">
+                        <span class="lang-ko">스트레스만 받으면 심장이... 검사는 정상이래요</span>
+                        <span class="lang-en">Heart races with stress... Tests say normal</span>
+                    </p>
+                    <span class="pain-category category-stress"><span class="lang-ko">심계항진</span><span class="lang-en">Palpitations</span></span>
+                </div>
+                <div class="pain-card">
+                    <p class="pain-quote">
+                        <span class="lang-ko">자다가 여러번 깨고, 회복이 안 돼요</span>
+                        <span class="lang-en">Wake up often, no recovery</span>
+                    </p>
+                    <p class="pain-context">
+                        <span class="lang-ko">수면이 보약인데 잠을 못자니 악순환...</span>
+                        <span class="lang-en">Sleep is vital, but I can't sleep... vicious cycle</span>
+                    </p>
+                    <span class="pain-category category-sleep"><span class="lang-ko">수면 문제</span><span class="lang-en">Sleep Issues</span></span>
+                </div>
+                <div class="pain-card">
+                    <p class="pain-quote">
+                        <span class="lang-ko">두통이 자주 와요</span>
+                        <span class="lang-en">Frequent headaches</span>
+                    </p>
+                    <p class="pain-context">
+                        <span class="lang-ko">진통제 먹어도 또 오고... 긴장성 두통인가요?</span>
+                        <span class="lang-en">Painkillers don't help long... Tension headache?</span>
+                    </p>
+                    <span class="pain-category category-stress"><span class="lang-ko">긴장성 두통</span><span class="lang-en">Headache</span></span>
+                </div>
+                <div class="pain-card">
+                    <p class="pain-quote">
+                        <span class="lang-ko">속이 더부룩하고 소화가 안 돼요</span>
+                        <span class="lang-en">Bloated and indigestion</span>
+                    </p>
+                    <p class="pain-context">
+                        <span class="lang-ko">위내시경 해도 이상 없대요. 계속 불편해요</span>
+                        <span class="lang-en">Endoscopy is normal. Still uncomfortable</span>
+                    </p>
+                    <span class="pain-category category-digestion"><span class="lang-ko">소화불량</span><span class="lang-en">Indigestion</span></span>
+                </div>
+                <div class="pain-card">
+                    <p class="pain-quote">
+                        <span class="lang-ko">변비와 설사가 반복돼요</span>
+                        <span class="lang-en">Constipation and diarrhea alternate</span>
+                    </p>
+                    <p class="pain-context">
+                        <span class="lang-ko">장이 예민해서... 여행도 걱정이에요</span>
+                        <span class="lang-en">Sensitive gut... worried about traveling</span>
+                    </p>
+                    <span class="pain-category category-ibs"><span class="lang-ko">장 건강</span><span class="lang-en">Gut Health</span></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="survey" style="background: var(--bg-secondary); border-top: 1px solid var(--border-color);">
+        <div class="container">
+            <div class="survey-header">
+                <h2>
+                    <span class="lang-ko">나의 증상 확인하기</span>
+                    <span class="lang-en">Check My Symptoms</span>
+                </h2>
+                <p>
+                    <span class="lang-ko">검사는 정상이지만 통증은 계속된다면,<br>개인화된 정서지문으로 근본 원인을 찾아보세요.</span>
+                    <span class="lang-en">If tests are normal but pain persists,<br>find the root cause with your emotional fingerprint.</span>
+                </p>
+            </div>
+
+            <form style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 24px; padding: 48px; max-width: 800px; margin: 0 auto;">
+                
+                <div class="q-block">
+                    <div class="q-title">
+                        <span class="lang-ko">Q1. 어떤 불편함이 있으신가요?</span>
+                        <span class="lang-en">Q1. What discomfort do you have?</span>
+                        <span class="sub-desc">
+                            <span class="lang-ko">(복수선택 가능)</span>
+                            <span class="lang-en">(Multiple choice)</span>
+                        </span>
+                        <span class="q-req">
+                            <span class="lang-ko">필수</span>
+                            <span class="lang-en">Req</span>
+                        </span>
+                    </div>
+                    <div class="grid-2-col">
+                        <label class="form-label"><input type="checkbox" name="q1" value="heart"><span><span class="lang-ko">이유 없는 두근거림, 불안감</span><span class="lang-en">Unexplained palpitations, anxiety</span></span></label>
+                        <label class="form-label"><input type="checkbox" name="q1" value="digest"><span><span class="lang-ko">소화불량, 목 이물감</span><span class="lang-en">Indigestion, lump in throat</span></span></label>
+                        <label class="form-label"><input type="checkbox" name="q1" value="sleep"><span><span class="lang-ko">수면 장애, 만성 피로</span><span class="lang-en">Sleep disorder, chronic fatigue</span></span></label>
+                        <label class="form-label"><input type="checkbox" name="q1" value="headache"><span><span class="lang-ko">두통, 어지러움</span><span class="lang-en">Headache, dizziness</span></span></label>
+                        <label class="form-label"><input type="checkbox" name="q1" value="autonomic"><span><span class="lang-ko">자율신경 실조증 진단</span><span class="lang-en">Dysautonomia diagnosis</span></span></label>
+                        <label class="form-label"><input type="checkbox" name="q1" value="none"><span><span class="lang-ko">특별한 증상 없음</span><span class="lang-en">No specific symptoms</span></span></label>
+                    </div>
+                </div>
+
+                <div class="q-block">
+                    <div class="q-title">
+                        <span class="lang-ko">Q2. 하루 중 증상이 심해지는 패턴이 있나요?</span>
+                        <span class="lang-en">Q2. Is there a daily pattern?</span>
+                        <span class="sub-desc"><span class="lang-ko">(복수선택 가능)</span><span class="lang-en">(Multiple choice)</span></span>
+                        <span class="q-req"><span class="lang-ko">필수</span><span class="lang-en">Req</span></span>
+                    </div>
+                    <div class="grid-2-col">
+                        <label class="form-label"><input type="checkbox" name="q2" value="morning"><span><span class="lang-ko">아침에 심함</span><span class="lang-en">Worse in morning</span></span></label>
+                        <label class="form-label"><input type="checkbox" name="q2" value="meal"><span><span class="lang-ko">식사 후</span><span class="lang-en">After meals</span></span></label>
+                        <label class="form-label"><input type="checkbox" name="q2" value="night"><span><span class="lang-ko">저녁/밤에 심함</span><span class="lang-en">Worse at night</span></span></label>
+                        <label class="form-label"><input type="checkbox" name="q2" value="irregular"><span><span class="lang-ko">패턴 없이 불규칙</span><span class="lang-en">Irregular pattern</span></span></label>
+                        <label class="form-label" style="grid-column: 1 / -1;"><input type="checkbox" name="q2" value="stress"><span><span class="lang-ko">스트레스 받은 후</span><span class="lang-en">After stress</span></span></label>
+                    </div>
+                </div>
+
+                <div class="q-block">
+                    <div class="q-title">
+                        <span class="lang-ko">Q3. 현재 약물·영양제·치료 등을 위해 매달 지출하는 비용은?</span>
+                        <span class="lang-en">Q3. Monthly spend on meds/therapy?</span>
+                        <span class="q-req"><span class="lang-ko">필수</span><span class="lang-en">Req</span></span>
+                    </div>
+                    <p class="text-guide">
+                        <span class="lang-ko">스네피, 심리치료, 운동, 수면제, 소화제, 영양제, 한약 등을 모두 포함해주세요</span>
+                        <span class="lang-en">Include therapy, exercise, meds, supplements, herbal medicine, etc.</span>
+                    </p>
+                    <div class="grid-2-col">
+                        <label class="form-label"><input type="radio" name="q3" value="0" required><span><span class="lang-ko">0원 (지출 없음)</span><span class="lang-en">$0 (None)</span></span></label>
+                        <label class="form-label"><input type="radio" name="q3" value="1to3"><span><span class="lang-ko">1~3만원</span><span class="lang-en">$10~30</span></span></label>
+                        <label class="form-label"><input type="radio" name="q3" value="3to5"><span><span class="lang-ko">3~5만원</span><span class="lang-en">$30~50</span></span></label>
+                        <label class="form-label"><input type="radio" name="q3" value="5to10"><span><span class="lang-ko">5~10만원</span><span class="lang-en">$50~100</span></span></label>
+                        <label class="form-label"><input type="radio" name="q3" value="10to20"><span><span class="lang-ko">10~20만원</span><span class="lang-en">$100~200</span></span></label>
+                        <label class="form-label"><input type="radio" name="q3" value="over20"><span><span class="lang-ko">20만원 이상</span><span class="lang-en">$200+</span></span></label>
+                    </div>
+                </div>
+
+                <div class="q-block">
+                    <div class="q-title">
+                        <span class="lang-ko">Q4. 감정과 신체 증상이 연결된다고 느끼나요?</span>
+                        <span class="lang-en">Q4. Do you feel emotions & symptoms are linked?</span>
+                        <span class="q-req"><span class="lang-ko">필수</span><span class="lang-en">Req</span></span>
+                    </div>
+                    <div class="grid-2-col">
+                        <label class="form-label"><input type="radio" name="q4" value="strong" required><span><span class="lang-ko">확실히 연결됨</span><span class="lang-en">Strongly linked</span></span></label>
+                        <label class="form-label"><input type="radio" name="q4" value="some"><span><span class="lang-ko">어느 정도 연결됨</span><span class="lang-en">Somewhat linked</span></span></label>
+                        <label class="form-label"><input type="radio" name="q4" value="unsure"><span><span class="lang-ko">잘 모르겠음</span><span class="lang-en">Not sure</span></span></label>
+                        <label class="form-label"><input type="radio" name="q4" value="no"><span><span class="lang-ko">별로 관련 없음</span><span class="lang-en">Not related</span></span></label>
+                    </div>
+                </div>
+
+                <div class="q-block">
+                    <div class="q-title">
+                        <span class="lang-ko">Q5. 월 3~5만원대 구독 서비스라면 이용 의향이 있나요?</span>
+                        <span class="lang-en">Q5. Would you use a $30-50/mo service?</span>
+                        <span class="q-req"><span class="lang-ko">필수</span><span class="lang-en">Req</span></span>
+                    </div>
+                    <p class="text-guide">
+                        <span class="lang-ko">정서지문 분석 + 개인화 리포트(상황에 따라 크레딧 혜택)</span>
+                        <span class="lang-en">Fingerprint analysis + Personalized report (with credit benefits)</span>
+                    </p>
+                    <div class="grid-2-col">
+                        <label class="form-label"><input type="radio" name="q5" value="yes_5" required><span><span class="lang-ko">네, 5만원도 OK</span><span class="lang-en">Yes, $50 is OK</span></span></label>
+                        <label class="form-label"><input type="radio" name="q5" value="yes_3"><span><span class="lang-ko">네, 3만원대면 OK</span><span class="lang-en">Yes, if ~$30</span></span></label>
+                        <label class="form-label"><input type="radio" name="q5" value="cond"><span><span class="lang-ko">기능 보고 결정</span><span class="lang-en">Depends on features</span></span></label>
+                        <label class="form-label"><input type="radio" name="q5" value="no"><span><span class="lang-ko">아니요, 비싸요</span><span class="lang-en">No, too expensive</span></span></label>
+                    </div>
+                </div>
+
+                <div class="q-block" style="padding-top: 40px; border-top: 1px solid var(--border-color); margin-bottom: 40px;">
+                    <div class="q-title">
+                        <span class="lang-ko">Q6. 기본 정보를 입력해주세요</span>
+                        <span class="lang-en">Q6. Basic Information</span>
+                        <span class="q-req"><span class="lang-ko">필수</span><span class="lang-en">Req</span></span>
+                    </div>
+                    <p class="text-guide">
+                        <span class="lang-ko">서비스 맞춤화 및 얼리버드 알림을 위해 필요합니다</span>
+                        <span class="lang-en">Needed for personalization and early bird alerts</span>
+                    </p>
+
+                    <div class="form-row-group">
+                        <div>
+                            <label style="display:block; font-size:14px; font-weight:600; margin-bottom:8px;">
+                                <span class="lang-ko">성별 *</span><span class="lang-en">Gender *</span>
+                            </label>
+                            <div class="gender-wrapper">
+                                <label class="form-label" style="padding:14px;"><input type="radio" name="gender" value="m" required> <span class="lang-ko">남성</span><span class="lang-en">Male</span></label>
+                                <label class="form-label" style="padding:14px;"><input type="radio" name="gender" value="f"> <span class="lang-ko">여성</span><span class="lang-en">Female</span></label>
+                            </div>
+                        </div>
+                        <div>
+                            <label style="display:block; font-size:14px; font-weight:600; margin-bottom:8px;">
+                                <span class="lang-ko">연령대 *</span><span class="lang-en">Age Group *</span>
+                            </label>
+                            <select class="form-select" name="age_group" required style="height: 58px;">
+
+                                <option value="">Select (선택해주세요)</option>
+                                <option value="20">20s (20대)</option>
+                                <option value="30">30s (30대)</option>
+                                <option value="40">40s (40대)</option>
+                                <option value="50">50s (50대)</option>
+                                <option value="60">60s+ (60대 이상)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row-group">
+                        <div>
+                            <label style="display:block; font-size:14px; font-weight:600; margin-bottom:8px;">
+                                <span class="lang-ko">이메일 주소 *</span><span class="lang-en">Email *</span>
+                            </label>
+                            <input type="email"  name="email" class="form-input" placeholder="example@email.com" data-ph-ko="example@email.com" data-ph-en="example@email.com" required>
+
+                        </div>
+                        <div>
+                            <label style="display:block; font-size:14px; font-weight:600; margin-bottom:8px;">
+                                <span class="lang-ko">전화번호 (선택)</span><span class="lang-en">Phone (Optional)</span>
+                            </label>
+                            <input type="tel" name="phone" class="form-input" placeholder="010-1234-5678" data-ph-ko="010-1234-5678" data-ph-en="010-1234-5678">
+                        </div>
+                    </div>
+
+                    <div class="accordion-wrap" style="margin-top:20px;">
+                        <input type="checkbox" id="toggle-opt" class="accordion-toggle">
+                        <label for="toggle-opt" class="accordion-header" style="justify-content: center; background: rgba(99, 102, 241, 0.05); color: var(--accent-primary);">
+                            <span style="font-size:14px;">
+                                <span class="lang-ko">▼ 추가 정보 입력 (직업, 국적, 지역 등 - 선택)</span>
+                                <span class="lang-en">▼ Additional Info (Job, Location, etc. - Optional)</span>
+                            </span>
+                        </label>
+                        <div class="accordion-content">
+                            <div class="accordion-content-inner">
+                                <div class="form-row-group">
+                                    <div>
+                                        <label style="display:block; font-size:14px; font-weight:600; margin-bottom:8px;">
+                                            <span class="lang-ko">직업</span><span class="lang-en">Occupation</span>
+                                        </label>
+                                        <select class="form-select" name="occupation">
+                                            <option value="">Select (선택해주세요)</option>
+                                            <option value="office">Worker (직장인)</option>
+                                            <option value="student">Student (학생)</option>
+                                            <option value="home">Homemaker (주부)</option>
+                                            <option value="self">Self-employed (자영업)</option>
+                                            <option value="free">Freelancer (프리랜서)</option>
+                                            <option value="other">Other (기타)</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label style="display:block; font-size:14px; font-weight:600; margin-bottom:8px;">
+                                            <span class="lang-ko">국적 및 거주 형태</span><span class="lang-en">Nationality/Residence</span>
+                                        </label>
+                                        <select class="form-select" name="nationality_residence">
+                                            <option value="">Select (선택해주세요)</option>
+                                            <option value="kr_in">Korean in Korea (내국인/국내)</option>
+                                            <option value="fr_in">Foreigner in Korea (외국인/국내)</option>
+                                            <option value="kr_out">Korean Overseas (내국인/해외)</option>
+                                            <option value="fr_out">Foreigner Overseas (외국인/해외)</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-row-group">
+                                    <div>
+                                        <label style="display:block; font-size:14px; font-weight:600; margin-bottom:8px;">
+                                            <span class="lang-ko">거주 지역</span><span class="lang-en">Residence Area</span>
+                                        </label>
+                                        <select class="form-select" name="residence_area">
+                                            <option value="" disabled selected>Select (선택해주세요)</option>
+                                            <option value="seoul">Seoul (서울)</option>
+                                            <option value="gyeonggi">Gyeonggi (경기)</option>
+                                            <option value="incheon">Incheon (인천)</option>
+                                            <option value="gangwon">Gangwon (강원)</option>
+                                            <option value="chungbuk">Chungbuk (충북)</option>
+                                            <option value="chungnam">Chungnam (충남)</option>
+                                            <option value="daejeon">Daejeon (대전)</option>
+                                            <option value="sejong">Sejong (세종)</option>
+                                            <option value="jeonbuk">Jeonbuk (전북)</option>
+                                            <option value="jeonnam">Jeonnam (전남)</option>
+                                            <option value="gwangju">Gwangju (광주)</option>
+                                            <option value="gyeongbuk">Gyeongbuk (경북)</option>
+                                            <option value="gyeongnam">Gyeongnam (경남)</option>
+                                            <option value="daegu">Daegu (대구)</option>
+                                            <option value="ulsan">Ulsan (울산)</option>
+                                            <option value="busan">Busan (부산)</option>
+                                            <option value="jeju">Jeju (제주)</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label style="display:block; font-size:14px; font-weight:600; margin-bottom:8px;">
+                                            <span class="lang-ko">주 활동 지역</span><span class="lang-en">Main Activity Area</span>
+                                        </label>
+                                        <select class="form-select" name="activity_area">
+                                            <option value="" disabled selected>Select (선택해주세요)</option>
+                                            <option value="seoul">Seoul (서울)</option>
+                                            <option value="gyeonggi">Gyeonggi (경기)</option>
+                                            <option value="incheon">Incheon (인천)</option>
+                                            <option value="busan">Busan (부산)</option>
+                                            <option value="other">Other (기타)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 24px;">
+                        <label style="display:block; font-size:14px; font-weight:600; margin-bottom:8px;">
+                            <span class="lang-ko">추가로 하고 싶은 말 (선택)</span>
+                            <span class="lang-en">Additional Comments (Optional)</span>
+                        </label>
+                        <textarea class="form-textarea" name="comments" rows="3" placeholder="예: 이런 기능이 있으면 좋겠어요..." data-ph-ko="예: 이런 기능이 있으면 좋겠어요..." data-ph-en="Ex: I wish there was a feature like..."></textarea>
+                    </div>
+
+                    <div style="padding: 20px; background: rgba(99, 102, 241, 0.05); border: 1px solid rgba(99, 102, 241, 0.2); border-radius: 12px;">
+                        <label style="display: flex; align-items: flex-start; cursor: pointer;">
+                            <input type="checkbox" name="consent" required style="margin-right: 12px; margin-top: 4px; width: 18px; height: 18px; accent-color: var(--accent-primary);">
+                            <span style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
+                                <span class="lang-ko">개인정보 수집 및 이용에 동의합니다. 수집된 정보는 서비스 개선 및 얼리버드 알림 목적으로만 사용되며, 언제든지 삭제를 요청하실 수 있습니다. *</span>
+                                <span class="lang-en">I agree to the collection and use of personal data for service improvement and early bird notifications. You can request deletion at any time. *</span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="accordion-wrap">
+                    <input type="checkbox" id="toggle-q7" class="accordion-toggle">
+                    <label for="toggle-q7" class="accordion-header">
+                        <h3>
+                            <i class="fa-solid fa-gift" style="color:var(--accent-warm)"></i> 
+                            <span class="lang-ko">Q7. 크레딧으로 교환하고 싶은 혜택</span>
+                            <span class="lang-en">Q7. Benefits for Credit Exchange</span>
+                            <span class="opt-label"><span class="lang-ko">선택</span><span class="lang-en">Opt</span></span>
+                        </h3>
+                        <i class="fa-solid fa-chevron-down icon"></i>
+                    </label>
+                    <div class="accordion-content">
+                        <div class="accordion-content-inner">
+                            <p class="text-guide">
+                                <span class="lang-ko">크레딧으로 교환하고 싶은 혜택 (복수선택 가능)</span>
+                                <span class="lang-en">Desired benefits (Multiple choice)</span>
+                            </p>
+                            <div class="grid-2-col">
+                                <label class="form-label"><input type="checkbox" name="q7" value="cafe"><span><span class="lang-ko">카페/베이커리/아이스크림</span><span class="lang-en">Cafe/Bakery/Ice cream</span></span></label>
+                                <label class="form-label"><input type="checkbox" name="q7" value="cvs"><span><span class="lang-ko">편의점/생활편의 시설</span><span class="lang-en">Convenience Store</span></span></label>
+                                <label class="form-label"><input type="checkbox" name="q7" value="health"><span><span class="lang-ko">헬스/운동/찜질방</span><span class="lang-en">Gym/Sauna</span></span></label>
+                                <label class="form-label"><input type="checkbox" name="q7" value="beauty"><span><span class="lang-ko">헤어/네일/스파/마사지</span><span class="lang-en">Hair/Nail/Spa</span></span></label>
+                                <label class="form-label"><input type="checkbox" name="q7" value="content"><span><span class="lang-ko">콘텐츠/음악 구독권</span><span class="lang-en">Content/Music Sub</span></span></label>
+                                <label class="form-label"><input type="checkbox" name="q7" value="food"><span><span class="lang-ko">외식 (치킨/피자/식당)</span><span class="lang-en">Dining Out (Pizza/Chicken)</span></span></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-wrap">
+                    <input type="checkbox" id="toggle-q8" class="accordion-toggle">
+                    <label for="toggle-q8" class="accordion-header">
+                        <h3>
+                            <i class="fa-solid fa-users" style="color:var(--accent-secondary)"></i> 
+                            <span class="lang-ko">Q8. 특수그룹 맞춤 서비스</span>
+                            <span class="lang-en">Q8. Special Group Service</span>
+                            <span class="opt-label"><span class="lang-ko">선택</span><span class="lang-en">Opt</span></span>
+                        </h3>
+                        <i class="fa-solid fa-chevron-down icon"></i>
+                    </label>
+                    <div class="accordion-content">
+                        <div class="accordion-content-inner">
+                            <p class="text-guide">
+                                <span class="lang-ko">같은 상황의 5명 이상이 모이면, 그룹 전용 특화 프로그램을 기획해드립니다.</span>
+                                <span class="lang-en">If 5+ people gather, we plan a special group program.</span>
+                            </p>
+                            <div class="grid-2-col" style="margin-bottom: 16px;">
+                                <label class="form-label"><div style="width:100%"><div style="display:flex; align-items:center; margin-bottom:4px;"><input type="checkbox" name="q8" value="mom"> <span style="font-weight:600;"><span class="lang-ko">임산부 / 육아맘</span><span class="lang-en">Pregnant/Parenting</span></span></div><div style="font-size:12px; color:var(--text-muted); padding-left:30px;"><span class="lang-ko">산전/산후 정서 관리</span><span class="lang-en">Pre/Post-natal care</span></div></div></label>
+                                <label class="form-label"><div style="width:100%"><div style="display:flex; align-items:center; margin-bottom:4px;"><input type="checkbox" name="q8" value="chronic"> <span style="font-weight:600;"><span class="lang-ko">만성질환 관리</span><span class="lang-en">Chronic Illness</span></span></div><div style="font-size:12px; color:var(--text-muted); padding-left:30px;"><span class="lang-ko">당뇨, 고혈압 등 관리</span><span class="lang-en">Diabetes, Hypertension</span></div></div></label>
+                                <label class="form-label"><div style="width:100%"><div style="display:flex; align-items:center; margin-bottom:4px;"><input type="checkbox" name="q8" value="meno"> <span style="font-weight:600;"><span class="lang-ko">갱년기 여성</span><span class="lang-en">Menopause</span></span></div><div style="font-size:12px; color:var(--text-muted); padding-left:30px;"><span class="lang-ko">호르몬 변화 정서 패턴</span><span class="lang-en">Hormonal emotion patterns</span></div></div></label>
+                                <label class="form-label"><div style="width:100%"><div style="display:flex; align-items:center; margin-bottom:4px;"><input type="checkbox" name="q8" value="taper"> <span style="font-weight:600;"><span class="lang-ko">약물 테이퍼링</span><span class="lang-en">Med Tapering</span></span></div><div style="font-size:12px; color:var(--text-muted); padding-left:30px;"><span class="lang-ko">의존도 줄이기</span><span class="lang-en">Reducing dependency</span></div></div></label>
+                                <label class="form-label"><div style="width:100%"><div style="display:flex; align-items:center; margin-bottom:4px;"><input type="checkbox" name="q8" value="burnout"> <span style="font-weight:600;"><span class="lang-ko">직장인 번아웃</span><span class="lang-en">Burnout</span></span></div><div style="font-size:12px; color:var(--text-muted); padding-left:30px;"><span class="lang-ko">업무 스트레스</span><span class="lang-en">Work stress</span></div></div></label>
+                                <label class="form-label"><div style="width:100%"><div style="display:flex; align-items:center; margin-bottom:4px;"><input type="checkbox" name="q8" value="student"> <span style="font-weight:600;"><span class="lang-ko">대학생 / 수험생</span><span class="lang-en">Student</span></span></div><div style="font-size:12px; color:var(--text-muted); padding-left:30px;"><span class="lang-ko">학업 압박 패턴</span><span class="lang-en">Academic pressure</span></div></div></label>
+                                <label class="form-label"><div style="width:100%"><div style="display:flex; align-items:center; margin-bottom:4px;"><input type="checkbox" name="q8" value="foreigner"> <span style="font-weight:600;"><span class="lang-ko">외국인 거주자</span><span class="lang-en">Foreigner in KR</span></span></div><div style="font-size:12px; color:var(--text-muted); padding-left:30px;"><span class="lang-ko">유학생, 취업인, 배우자</span><span class="lang-en">Students, Workers</span></div></div></label>
+                                <label class="form-label"><div style="width:100%"><div style="display:flex; align-items:center; margin-bottom:4px;"><input type="checkbox" name="q8" value="marriage"> <span style="font-weight:600;"><span class="lang-ko">결혼 준비</span><span class="lang-en">Getting Married</span></span></div><div style="font-size:12px; color:var(--text-muted); padding-left:30px;"><span class="lang-ko">예비 부부 갈등/스트레스</span><span class="lang-en">Pre-marital stress</span></div></div></label>
+                            </div>
+                            <div style="margin-top: 16px;">
+                                <p style="font-size:14px; font-weight:600; margin-bottom:8px;">
+                                    <span class="lang-ko">기타 (직접 입력)</span>
+                                    <span class="lang-en">Other (Type here)</span>
+                                </p>
+                                <input type="text" class="form-input" name="special_group_other" placeholder="예: 야간 근무자, 이혼 준비 중 등..." data-ph-ko="예: 야간 근무자, 이혼 준비 중 등..." data-ph-en="Ex: Night shift worker, preparing for divorce, etc.">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="font-size: 18px;">
+                    <span class="lang-ko">🎁 사전조사 샘플 </span>
+                    <span class="lang-en">🎁 사전조사 샘플 </span>
+                </button>
+                
+                <div style="text-align: center; margin-top: 24px;">
+                    <p style="font-size: 13px; color: var(--text-muted); display: inline-block;">
+                        <span class="lang-ko">🛡️ 민감한 개인정보는 안전하게 보호되며 상품발송때만 사용되고 이후 폐기됩니다.</span>
+                        <span class="lang-en">🛡️ Sensitive data is securely protected and used only for product delivery.</span>
+                    </p>
+                </div>
+
+            </form>
+        </div>
+    </section>
+
+<script>
+
+
+/* ===== Google Sheet 저장 ===== */
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyDLNEqKtq_PPvIQFYw82E8OrZbFwb0D9lDT-bHCUq8jdxZLUYaPJShcvtUo_hDy5Vx/exec";
+
+function getQueryParams() {
+  const p = new URLSearchParams(window.location.search);
+  return {
+    sample: p.get('sample') || '',
+    utm_source: p.get('utm_source') || '',
+    utm_medium: p.get('utm_medium') || '',
+    utm_campaign: p.get('utm_campaign') || '',
+    utm_content: p.get('utm_content') || ''
+  };
+}
+
+function getMulti(formData, key) {
+  return formData.getAll(key).map(x => String(x).trim()).filter(Boolean).join(',');
+}
+
+function buildPayload(formEl) {
+  const lang = document.documentElement.getAttribute('lang') || 'ko';
+  const qp = getQueryParams();
+  const fd = new FormData(formEl);
+
+  const payload = {
+    // 단일값
+    q3: fd.get('q3') || '',
+    q4: fd.get('q4') || '',
+    q5: fd.get('q5') || '',
+    gender: fd.get('gender') || '',
+    age_group: fd.get('age_group') || '',
+    email: fd.get('email') || '',
+    phone: fd.get('phone') || '',
+    occupation: fd.get('occupation') || '',
+    nationality_residence: fd.get('nationality_residence') || '',
+    residence_area: fd.get('residence_area') || '',
+    activity_area: fd.get('activity_area') || '',
+    special_group_other: fd.get('special_group_other') || '',
+    comments: fd.get('comments') || '',
+
+    // 다중값(체크박스)
+    q1: getMulti(fd, 'q1'),
+    q2: getMulti(fd, 'q2'),
+    q7: getMulti(fd, 'q7'),
+    q8: getMulti(fd, 'q8'),
+
+    // 동의
+    consent: fd.get('consent') ? 'Y' : 'N'
+  };
+
+  return {
+    ts: new Date().toISOString(),
+    page: window.location.pathname,
+    url: window.location.href,
+    lang,
+    ...qp,
+    ...payload
+  };
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  // 초기 placeholder 동기화
+
+  const form = document.getElementById('surveyForm');
+  if (!form) return;
+
+  // sample 값으로 버튼 라벨 자동 변경
+  const qp = getQueryParams();
+  const submitBtn = form.querySelector('button[type="submit"]');
+  if (submitBtn && qp.sample) {
+    const ko = submitBtn.querySelector('.lang-ko');
+    if (ko) ko.textContent = `🎁 사전조사 샘플 ${qp.sample}`;
+    const en = submitBtn.querySelector('.lang-en');
+    if (en) en.textContent = `🎁 Sample ${qp.sample}`;
+  }
+
+  // submit 리스너 1회
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    // (권장) Q1/Q2 최소 1개 체크 검증
+    const fd = new FormData(form);
+    if (fd.getAll('q1').length === 0) {
+      alert('Q1은 최소 1개 선택해주세요.');
+      return;
+    }
+    if (fd.getAll('q2').length === 0) {
+      alert('Q2는 최소 1개 선택해주세요.');
+      return;
+    }
+
+    const lang = document.documentElement.getAttribute('lang') || 'ko';
+    const payload = buildPayload(form);
+
+    // 중복 제출 방지
+    const btn = submitBtn;
+    if (btn) {
+      btn.disabled = true;
+      btn.style.opacity = '0.7';
+    }
+
+    try {
+      await fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (typeof gtag === 'function') {
+        gtag('event', 'lead_submit_success', { page_path: window.location.pathname, lang });
+      }
+
+      alert(lang === 'ko' ? '제출 완료! 감사합니다.' : 'Submitted! Thank you.');
+      form.reset();
+      updatePlaceholders(lang); // reset 후 placeholder 복구
+    } catch (err) {
+      if (typeof gtag === 'function') {
+        gtag('event', 'lead_submit_fail', { page_path: window.location.pathname, lang });
+      }
+      alert(lang === 'ko' ? '제출 실패. 다시 시도해주세요.' : 'Submission failed. Please try again.');
+    } finally {
+      if (btn) {
+        btn.disabled = false;
+        btn.style.opacity = '';
+      }
+    }
+  });
+});
+</script>
+
+
+</body>
+</html>
