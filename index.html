@@ -10,6 +10,35 @@
 
   gtag('config', 'G-SQFDW53MYX');
 </script>
+    <script>
+  function toggleHeaderMenu(e) {
+    e.stopPropagation();
+    const menu = document.getElementById('headerMenu');
+    const btns = document.querySelectorAll('[aria-controls="headerMenu"]');
+
+    const willOpen = menu.classList.contains('hidden');
+    menu.classList.toggle('hidden', !willOpen);
+
+    btns.forEach(b => b.setAttribute('aria-expanded', willOpen ? 'true' : 'false'));
+  }
+
+  // 바깥 클릭 시 닫기
+  document.addEventListener('click', function () {
+    const menu = document.getElementById('headerMenu');
+    if (!menu) return;
+    if (!menu.classList.contains('hidden')) {
+      menu.classList.add('hidden');
+      document.querySelectorAll('[aria-controls="headerMenu"]').forEach(b => b.setAttribute('aria-expanded', 'false'));
+    }
+  });
+
+  // 메뉴 내부 클릭은 닫힘 방지(링크 클릭은 정상 이동)
+  document.addEventListener('DOMContentLoaded', function () {
+    const menu = document.getElementById('headerMenu');
+    if (menu) menu.addEventListener('click', function (e) { e.stopPropagation(); });
+  });
+</script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Psywell - 정서 반응 패턴 식별</title>
@@ -33,7 +62,14 @@
   color: var(--text-color);
 }
 .icon-btn:hover{ background:#f6f6f6; }
+        
+/* PC 텍스트 버튼 */
+.sample-text { display: inline-flex; align-items: center; gap: 6px; }
 
+        /* 모바일 ⋯ 버튼 (기존 contact-icon 룩을 쓰는 경우 그대로 둬도 됨) */
+.sample-icon { display: none; }
+
+        
 /* 드롭다운 */
 .header-menu{
   position:absolute;
@@ -93,10 +129,10 @@
   display:none; /* 기본은 숨김 */
 }
 
-/* 모바일에서: 텍스트 CTA 숨기고 아이콘 CTA 표시 */
+/* 반응형: 모바일에서는 텍스트 숨기고 ⋯ 버튼 노출 */
 @media (max-width: 768px){
-  .cta-btn-desktop{ display:none; }
-  .cta-btn-mobile{ display:inline-flex; align-items:center; justify-content:center; }
+  .sample-text { display: none; }
+  .sample-icon { display: inline-flex; }
 }
 
         /* [1] 디자인 시스템 (요청하신 색상 적용) */
@@ -228,20 +264,18 @@
   opacity: 0.8;
 }
 
-/* 드롭다운 메뉴 */
+/* 드롭다운 박스 */
 .sample-menu{
-  display: none;
   position: absolute;
-  top: 100%;
-  margin-top: 8px;       /* 시각 간격 */
   right: 0;
-  min-width: 140px;
-  background: #FFFFFF;
-  border: 1px solid rgba(80, 22, 74, 0.15);
+  top: calc(100% + 10px);
+  min-width: 180px;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,.08);
   border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-  padding: 6px;
-  z-index: 2000;
+  box-shadow: 0 10px 30px rgba(0,0,0,.12);
+  padding: 8px;
+  z-index: 9999;
 }
 
 /* ✅ 트리거-메뉴 사이 hover 브릿지(빈 공간을 hover로 메움) */
@@ -265,15 +299,16 @@
   display:block;
 }
 
-/* 메뉴 항목 */
+/* 드롭다운 아이템 */
 .sample-item{
   display: block;
-  padding: 10px 10px;
+  padding: 10px 12px;
   border-radius: 10px;
-  font-weight: 500;
-  font-size: 14px;
-  color: rgba(80, 22, 74, 0.7);      /* 톤 다운 */
+  text-decoration: none;
+  color: inherit;
 }
+.sample-item:hover{ background: rgba(0,0,0,.05); }
+
 
 .sample-item:hover{
   background: rgba(80, 22, 74, 0.06);
@@ -572,11 +607,8 @@
   flex-wrap:nowrap;
 }
 
-.menu-wrap{
-  position:relative;
-  display:flex;
-  align-items:center;
-}
+/* 드롭다운 위치 기준 */
+.menu-wrap { position: relative; display: inline-flex; align-items: center; gap: 10px; }
 
 /* sample-menu는 기존 스타일 재사용 + 위치만 확실히 */
 #headerMenu.sample-menu{
@@ -595,32 +627,66 @@
 
 <div class="wrap">
 
-<header>
-  <div class="header-inner">
-    <a href="#" class="logo">PSYwell</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <!-- 좌측: 로고 -->
+    <a class="brand" href="index.html" aria-label="Home">
+      <!-- 기존 로고/텍스트 그대로 두세요 -->
+      <span class="brand-title">Your Brand</span>
+    </a>
 
-    <div class="nav-right">
-      <!-- Contact Us (PC 텍스트) -->
-      <a class="nav-link contact-link" href="mailto:contact@psywell.com?subject=PSYwell%20Inquiry">
-        Contact Us
-      </a>
+    <!-- 우측: 액션 영역 -->
+    <div class="top-actions">
+      <!-- (1) 사전조사 드롭다운 -->
+      <div class="menu-wrap">
+        <!-- PC 텍스트 버튼 -->
+        <button type="button"
+                class="nav-link sample-trigger sample-text"
+                onclick="toggleHeaderMenu(event)"
+                aria-haspopup="true"
+                aria-controls="headerMenu"
+                aria-expanded="false">
+          사전조사 <span class="sample-caret">▾</span>
+        </button>
 
-      <!-- Contact Us (모바일 아이콘) -->
-      <a class="contact-icon" href="mailto:contact@psywell.com?subject=PSYwell%20Inquiry"
-         aria-label="Contact Us" title="Contact Us">
-        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
-             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-             aria-hidden="true">
-          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-          <polyline points="22,6 12,13 2,6"></polyline>
+        <!-- 모바일 ⋯ 버튼 -->
+        <button type="button"
+                class="contact-icon sample-icon"
+                onclick="toggleHeaderMenu(event)"
+                aria-label="Survey samples"
+                title="Survey samples"
+                aria-haspopup="true"
+                aria-controls="headerMenu"
+                aria-expanded="false">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <circle cx="5" cy="12" r="2"></circle>
+            <circle cx="12" cy="12" r="2"></circle>
+            <circle cx="19" cy="12" r="2"></circle>
+          </svg>
+        </button>
+
+        <!-- 드롭다운 메뉴 -->
+        <div id="headerMenu" class="sample-menu hidden" role="menu" aria-label="Survey samples menu">
+          <a href="sample1.html" class="sample-item" role="menuitem">Sample 1</a>
+          <a href="sample2.html" class="sample-item" role="menuitem">Sample 2</a>
+          <a href="sample3.html" class="sample-item" role="menuitem">Sample 3</a>
+        </div>
+      </div>
+
+      <!-- (2) 기존 메일/연락 아이콘 (유지) -->
+      <a class="contact-icon" href="mailto:hello@example.com" aria-label="Email" title="Email">
+        <!-- 기존 아이콘 SVG 그대로 -->
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"></path>
         </svg>
       </a>
 
-      <!-- CTA -->
-      <a href="survey.html" class="header-btn">무료 패턴 분석 시작하기</a>
+      <!-- (3) 기존 CTA 버튼 (유지) -->
+      <a class="cta" href="contact.html">문의하기</a>
     </div>
   </div>
 </header>
+
 
 <!-- 헤더 높이 보정 -->
 <div class="h-16"></div>
@@ -798,6 +864,7 @@
 </body>
 
 </html>
+
 
 
 
