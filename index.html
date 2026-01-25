@@ -589,74 +589,66 @@
   right:0;
   top:100%;
 }
-/* ===== 헤더 클래스명 불일치 해결: topbar 매핑 ===== */
-header.topbar{
+/* =========================
+   HEADER (단일 버전으로 통일)
+   ========================= */
+.topbar{
   position: sticky;
   top: 0;
-  background-color:#F4F2F6;
-  border-bottom: 1px solid var(--header-line);
   z-index: 1000;
-  padding: 15px 0;
+  background: #F4F2F6;
+  border-bottom: 1px solid var(--header-line);
 }
 
 .topbar-inner{
   max-width: 1000px;
   margin: 0 auto;
-  padding: 0 20px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.brand .brand-title{
+.brand{ display: inline-flex; align-items: center; }
+.brand-title{
   font-size: 28px;
   font-weight: 800;
   color: var(--text-color);
 }
 
-/* 우측 액션 영역 */
+/* 우측 액션 */
 .top-actions{
-  display:flex;
-  align-items:center;
-  justify-content:flex-end;
-  gap:14px;
-  flex-wrap:nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: nowrap;
 }
 
-/* CTA */
-.top-actions .cta{
-  background-color: var(--btn-bg);
-  color: var(--white);
-  padding: 10px 24px;
-  border-radius: 30px;
+/* ⋯ 드롭다운 기준 */
+.menu-wrap{ position: relative; display: inline-flex; align-items: center; }
+
+/* 드롭다운 메뉴(기존 sample-menu 스타일 재사용하되, 위치 고정) */
+#headerMenu.sample-menu{
+  right: 0;
+  top: calc(100% + 10px);
+}
+
+/* CTA 버튼: 무료 패턴 분석 시작하기 */
+.cta-analysis{
+  height: 40px;
+  padding: 0 14px;
+  border-radius: 12px;
+  background: var(--btn-bg);
+  color: #fff;
   font-weight: 700;
-  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
   white-space: nowrap;
-  display:inline-flex;
-  align-items:center;
 }
+.cta-analysis:hover{ opacity: 0.92; }
 
-/* 데스크톱에서 메일 아이콘도 보이게 (기존 .contact-icon 기본 숨김을 상쇄) */
-.top-actions > a.contact-icon{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  width:40px;
-  height:40px;
-  border-radius:12px;
-  border:1px solid rgba(0,0,0,0.12);
-  background:#fff;
-}
-
-/* 모바일에서는 기존 로직 유지 (메일 아이콘/⋯ 버튼 노출은 이미 media query가 처리) */
-@media (max-width: 768px){
-  .top-actions > a.contact-icon{
-    border:none;
-    background:transparent;
-    width:auto;
-    height:auto;
-  }
-}
+/* 모바일에서도 ⋯는 항상 노출(요구사항: 사전조사 대신 ⋯ 사용) */
+.sample-icon{ display: inline-flex; }
 
     </style>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
@@ -670,32 +662,19 @@ header.topbar{
 
 <header class="topbar">
   <div class="topbar-inner">
-    <!-- 좌측: 로고 -->
+    <!-- 1) 로고 -->
     <a class="brand" href="index.html" aria-label="Home">
-      <!-- 기존 로고/텍스트 그대로 두세요 -->
       <span class="brand-title">Your Brand</span>
     </a>
 
-    <!-- 우측: 액션 영역 -->
+    <!-- 2) 우측 액션: ⋯(드롭다운) → 이메일 → 무료패턴분석 -->
     <div class="top-actions">
-      <!-- (1) 사전조사 드롭다운 -->
+      <!-- ⋯ 드롭다운 -->
       <div class="menu-wrap">
-        <!-- PC 텍스트 버튼 -->
         <button type="button"
-                class="nav-link sample-trigger sample-text"
+                class="icon-btn sample-icon"
                 onclick="toggleHeaderMenu(event)"
-                aria-haspopup="true"
-                aria-controls="headerMenu"
-                aria-expanded="false">
-          사전조사 <span class="sample-caret">▾</span>
-        </button>
-
-        <!-- 모바일 ⋯ 버튼 -->
-        <button type="button"
-                class="contact-icon sample-icon"
-                onclick="toggleHeaderMenu(event)"
-                aria-label="Survey samples"
-                title="Survey samples"
+                aria-label="Samples menu"
                 aria-haspopup="true"
                 aria-controls="headerMenu"
                 aria-expanded="false">
@@ -706,28 +685,25 @@ header.topbar{
           </svg>
         </button>
 
-        <!-- 드롭다운 메뉴 -->
-        <div id="headerMenu" class="sample-menu hidden" role="menu" aria-label="Survey samples menu">
+        <div id="headerMenu" class="sample-menu hidden" role="menu" aria-label="Samples">
           <a href="sample1.html" class="sample-item" role="menuitem">Sample 1</a>
           <a href="sample2.html" class="sample-item" role="menuitem">Sample 2</a>
           <a href="sample3.html" class="sample-item" role="menuitem">Sample 3</a>
         </div>
       </div>
 
-      <!-- (2) 기존 메일/연락 아이콘 (유지) -->
-      <a class="contact-icon" href="mailto:hello@example.com" aria-label="Email" title="Email">
-        <!-- 기존 아이콘 SVG 그대로 -->
+      <!-- 이메일 아이콘 -->
+      <a class="icon-btn" href="mailto:hello@example.com" aria-label="Email" title="Email">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
           <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"></path>
         </svg>
       </a>
 
-      <!-- (3) 기존 CTA 버튼 (유지) -->
-      <a class="cta" href="contact.html">문의하기</a>
+      <!-- 무료 패턴 분석 시작하기 (CTA) -->
+      <a class="cta-analysis" href="survey.html">무료 패턴 분석 시작하기</a>
     </div>
   </div>
 </header>
-
 
 <!-- 헤더 높이 보정 -->
 <div class="h-16"></div>
@@ -905,6 +881,7 @@ header.topbar{
 </body>
 
 </html>
+
 
 
 
