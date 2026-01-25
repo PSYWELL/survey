@@ -1500,38 +1500,46 @@
       }
 
       // 제출
-      document.getElementById('submitBtn').addEventListener('click', function() {
-        var email = document.getElementById('inputEmail').value.trim();
-        var phone = document.getElementById('inputPhone').value.trim();
+   document.getElementById('submitBtn').addEventListener('click', function() {
+  var email = document.getElementById('inputEmail').value.trim();
+  var phone = document.getElementById('inputPhone').value.trim();
 
-        if (!email) {
-          alert('이메일을 입력해주세요.');
-          return;
-        }
+  if (!email) {
+    alert('이메일을 입력해주세요.');
+    return;
+  }
 
-        // 히스토리에 저장
-        var totalChecks = saveToHistory({
-          answers: answers,
-          email: email,
-          phone: phone
-        });
+  // Google Sheet 저장
+  const payload = {
+    ts: new Date().toISOString(),
+    page: window.location.pathname,
+    url: window.location.href,
+    user_id: localStorage.getItem('mindcheck_user_id') || '',
+    answers: JSON.stringify(answers),
+    email: email,
+    phone: phone
+  };
 
-        console.log('=== 수집 데이터 ===');
-        console.log('설문 응답:', answers);
-        console.log('이메일:', email);
-        console.log('연락처:', phone);
-        console.log('총 체크 횟수:', totalChecks);
+  fetch("https://script.google.com/macros/s/AKfycbwZ0r2B-UqLio0uiZYUkP90Pj1wMLj-Gp1rWP-O00lJBTFMU7Mt9APh_PKedlbX7wzfIA/exec", {
+    method: 'POST',
+    mode: 'no-cors',
+    body: JSON.stringify(payload)
+  });
 
-        // 완료 화면
-        document.getElementById('resultScreen').classList.remove('active');
-        document.getElementById('completeScreen').classList.add('active');
-        
-        // 체크 횟수 표시
-        var checkCountEl = document.getElementById('checkCount');
-        if (checkCountEl) {
-          checkCountEl.textContent = totalChecks;
-        }
-      });
+  // 로컬 히스토리
+  var totalChecks = saveToHistory({
+    answers: answers,
+    email: email,
+    phone: phone
+  });
+
+  // 완료 화면 전환
+  document.getElementById('resultScreen').classList.remove('active');
+  document.getElementById('completeScreen').classList.add('active');
+
+  document.getElementById('checkCount').textContent = totalChecks;
+});
+
 
     })();
   </script>
