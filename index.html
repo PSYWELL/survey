@@ -10,6 +10,22 @@
 
   gtag('config', 'G-SQFDW53MYX');
 </script>
+    <script>
+  function toggleHeaderMenu(e) {
+    e.stopPropagation();
+    const menu = document.getElementById('headerMenu');
+    if (!menu) return;
+    menu.classList.toggle('hidden');
+  }
+
+  // 바깥 클릭 시 닫기
+  document.addEventListener('click', () => {
+    const menu = document.getElementById('headerMenu');
+    if (!menu) return;
+    menu.classList.add('hidden');
+  });
+</script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Psywell - 정서 반응 패턴 식별</title>
@@ -483,45 +499,80 @@
     </style>
 </head>
 <body>
+<div class="h-16"></div>
 
 <div class="wrap">
 
-<header>
-  <div class="header-inner">
-    <a href="#" class="logo">Psywell</a>
+<header class="fixed top-0 left-0 right-0 z-50 bg-bgMain/80 backdrop-blur border-b border-black/5">
+  <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+    <!-- 좌측: 로고/타이틀 -->
+    <a href="#" class="font-bold text-textBlack tracking-tight">
+      <span class="lang-ko">My Recovery System</span>
+      <span class="lang-en">My Recovery System</span>
+    </a>
 
-    <div class="nav-right">
-      <!-- ✅ 샘플 메뉴 추가 (새 창/탭으로 열기) -->
-   <div class="sample-dropdown">
-  <button class="sample-trigger" type="button" aria-haspopup="true" aria-expanded="false">
-    사전조사
-    <span class="sample-caret">▾</span>
-  </button>
+    <!-- 우측: 액션(모바일 아이콘) -->
+    <div class="flex items-center gap-2">
+      <!-- 컨택트: 이메일 아이콘 -->
+      <a
+        href="mailto:stella@yggda.com?subject=My%20Recovery%20System%20Inquiry"
+        class="w-10 h-10 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 flex items-center justify-center"
+        aria-label="Contact us (email)"
+        title="Contact us"
+      >
+        <i class="ph ph-envelope-simple text-xl text-textPrimary"></i>
+      </a>
 
-  <div class="sample-menu" role="menu">
-    <a href="indexSUR1.html" class="sample-item" target="_blank" rel="noopener noreferrer" role="menuitem">샘플 1</a>
-    <a href="indexSUR2.html" class="sample-item" target="_blank" rel="noopener noreferrer" role="menuitem">샘플 2</a>
-    <a href="indexSUR3.html" class="sample-item" target="_blank" rel="noopener noreferrer" role="menuitem">샘플 3</a>
-  </div>
-</div>
+      <!-- 사전조사/샘플: 점점점(⋯) 드롭다운 -->
+      <button
+        type="button"
+        class="w-10 h-10 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 flex items-center justify-center"
+        aria-label="Survey samples"
+        title="Survey samples"
+        onclick="toggleHeaderMenu(event)"
+      >
+        <i class="ph ph-dots-three-outline text-xl text-textPrimary"></i>
+      </button>
 
+      <!-- (선택) CTA 버튼: 모바일에서만 아이콘, 데스크탑은 텍스트 -->
+      <button
+        onclick="document.querySelector('#survey-section').scrollIntoView({behavior:'smooth'})"
+        class="ml-1 h-10 px-4 rounded-xl bg-accent text-white font-semibold hover:bg-accentDark shadow-soft hidden sm:inline-flex items-center"
+      >
+        <span class="lang-ko">지금 예약하기</span><span class="lang-en">Reserve Now</span>
+      </button>
+      <button
+        onclick="document.querySelector('#survey-section').scrollIntoView({behavior:'smooth'})"
+        class="ml-1 w-10 h-10 rounded-xl bg-accent text-white hover:bg-accentDark shadow-soft inline-flex sm:hidden items-center justify-center"
+        aria-label="Reserve now"
+        title="Reserve"
+      >
+        <i class="ph ph-arrow-right text-lg"></i>
+      </button>
 
-      <!-- 기존 Contact Us-->
-      <a href="mailto:stella@yggda.com" class="nav-link">Contact Us</a> 
-
-      <!-- 기존 모바일 아이콘
-      <a href="mailto:stella@yggda.com" class="contact-icon" aria-label="Contact Us">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-          <polyline points="22,6 12,13 2,6"></polyline>
-        </svg>
-      </a> -->
-
-      <!-- 기존 버튼 -->
-      <a href="survey.html" class="header-btn">무료 패턴 분석 시작하기</a>
+      <!-- 드롭다운 패널 -->
+      <div
+        id="headerMenu"
+        class="hidden absolute top-16 right-6 w-56 bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden"
+      >
+        <div class="px-4 py-3 text-xs font-bold tracking-widest text-gray-500">
+          <span class="lang-ko">사전조사 샘플</span>
+          <span class="lang-en">Survey Samples</span>
+        </div>
+        <a href="sample1.html" class="block px-4 py-3 text-sm text-textPrimary hover:bg-gray-50">
+          Sample 1
+        </a>
+        <a href="sample2.html" class="block px-4 py-3 text-sm text-textPrimary hover:bg-gray-50">
+          Sample 2
+        </a>
+        <a href="sample3.html" class="block px-4 py-3 text-sm text-textPrimary hover:bg-gray-50">
+          Sample 3
+        </a>
+      </div>
     </div>
   </div>
 </header>
+
 
     <section>
         <h1 class="main-title">문제는 의지가 아니라, 반복되는 선택 구조입니다.</h1>
@@ -696,5 +747,6 @@
 </body>
 
 </html>
+
 
 
