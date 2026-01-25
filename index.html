@@ -10,7 +10,7 @@
 
   gtag('config', 'G-SQFDW53MYX');
 </script>
-    <script>
+  <script>
   function toggleHeaderMenu(e) {
     e.stopPropagation();
     const menu = document.getElementById('headerMenu');
@@ -18,11 +18,17 @@
     menu.classList.toggle('hidden');
   }
 
-  // 바깥 클릭 시 닫기
   document.addEventListener('click', () => {
     const menu = document.getElementById('headerMenu');
     if (!menu) return;
     menu.classList.add('hidden');
+  });
+
+  // ✅ 메뉴 내부 클릭 시 닫히지 않게
+  document.addEventListener('DOMContentLoaded', () => {
+    const menu = document.getElementById('headerMenu');
+    if (!menu) return;
+    menu.addEventListener('click', (e) => e.stopPropagation());
   });
 </script>
 
@@ -578,6 +584,8 @@
             .footer-left { justify-content: center; flex-direction: column; }
         }
     </style>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
 </head>
 <body>
 <div class="h-16"></div>
@@ -831,6 +839,7 @@
 </body>
 
 </html>
+
 
 
 
