@@ -339,7 +339,8 @@
                 </p>
             </div>
 
-            <form style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 24px; padding: 48px; max-width: 800px; margin: 0 auto;">
+           <form id="surveyForm" style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 24px; padding: 48px; max-width: 800px; margin: 0 auto;">
+
                 
                 <div class="q-block">
                     <div class="q-title">
@@ -786,7 +787,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
       alert(lang === 'ko' ? '제출 완료! 감사합니다.' : 'Submitted! Thank you.');
       form.reset();
-      updatePlaceholders(lang); // reset 후 placeholder 복구
     } catch (err) {
       if (typeof gtag === 'function') {
         gtag('event', 'lead_submit_fail', { page_path: window.location.pathname, lang });
@@ -805,3 +805,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
 </body>
 </html>
+
