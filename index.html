@@ -323,6 +323,9 @@
             
             /* [수정] 헤더: Contact Us 글자 숨기고 아이콘 표시 */
             .nav-link { display: none; } 
+              .nav-link { display: none; }
+.nav-link.nav-sample { display: inline-block; }
+
             .contact-icon { display: block; }
             .nav-right { gap: 10px; } /* 아이콘과 버튼 사이 간격 조정 */
             
@@ -373,18 +376,22 @@
 <div class="wrap">
 
     <header>
-        <div class="header-inner">
-            <a href="#" class="logo">Psywell</a>
-            <div class="nav-right">
-                <a href="mailto:contact@Psywell.com" class="nav-link">Contact Us</a>
-                
-                <a href="mailto:contact@Psywell.com" class="contact-icon" aria-label="Contact Us">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-                </a>
+<div class="nav-right">
 
-                <a href="survey.html" class="header-btn">무료 패턴 분석 시작하기</a>
-            </div>
-        </div>
+    <!-- 샘플 메뉴 (새 탭/새 창으로 열기) -->
+    <a href="indexSUR1.html" class="nav-link" target="_blank" rel="noopener noreferrer">샘플1</a>
+    <a href="indexSUR2.html" class="nav-link" target="_blank" rel="noopener noreferrer">샘플2</a>
+    <a href="indexSUR3.html" class="nav-link" target="_blank" rel="noopener noreferrer">샘플3</a>
+
+    <a href="mailto:contact@Psywell.com" class="nav-link">Contact Us</a>
+
+    <a href="mailto:contact@Psywell.com" class="contact-icon" aria-label="Contact Us">
+        ...
+    </a>
+
+    <a href="survey.html" class="header-btn">무료 패턴 분석 시작하기</a>
+</div>
+
     </header>
 
     <section>
